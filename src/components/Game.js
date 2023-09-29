@@ -5,7 +5,7 @@ import { cardsData } from "../cards";
 function Game() {
   // states
   let [cardsState, setCardsState] = useState(cardsData);
-
+  console.log(cardsState);
   // kep first card info
   let [firstCard, setFirstCard] = useState(null);
   // is it first click?
@@ -56,18 +56,23 @@ function Game() {
   };
 
   return (
+    
     <section className="memory-game">
       {cardsState?.map((card) => {
         return (
-          <Card
-            key={card.id}
-            card={card}
-            onClick={(e) => handleClick(e, card)}
-          />
+          <>
+            <Card
+              key={card.id}
+              card={card}
+              onClick={(e) => handleClick(e, card)}
+              image={card.img}// Pass the image URL as a prop
+            />
+          </>
         );
       })}
       {/* <Card card={card} onClick={} /> */}
     </section>
+    
   );
 }
 
