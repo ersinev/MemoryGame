@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import { cardsData } from "../cards";
+import Timer from "./Timer";
+
+
 
 function Game() {
   const [cardsState, setCardsState] = useState(cardsData);
   const [selectedCards, setSelectedCards] = useState([]);
   const [matchedPairs, setMatchedPairs] = useState([]);
   const [disableClick, setDisableClick] = useState(false);
+  const [showEntryPage, setShowEntryPage] = useState(true); // State to control entry page visibility
+  const [showContainer, setShowContainer] = useState(false); // State to control container visibility
 
   useEffect(() => {
     checkForMatch();
@@ -56,21 +61,43 @@ function Game() {
     return matchedPairs.includes(card.key);
   };
 
+  // Function to handle starting the game and showing the container
+  const handleStartGame = () => {
+    setShowEntryPage(false); // Hide the entry page
+    setShowContainer(true); // Show the container
+  };
+
   return (
     <>
-    
+      <div className="container">
+        {/* Conditionally render the entry page based on showEntryPage */}
+        {showEntryPage && (
+          <div className="entryPage" style={{ color: "white" }}>
 
-    <section className="memory-game">
-      {cardsState.map((card) => (
-        <Card
-          key={card.id}
-          card={card}
-          onClick={() => handleClick(card)}
-          image={card.img}
-          isMatched={isCardMatched(card)}
-        />
-      ))}
-    </section>
+            
+            <button onClick={handleStartGame}>Start Game</button>
+            
+          </div>
+        )}
+
+        {/* Conditionally render the container based on showContainer */}
+        {showContainer && (
+          <div className="container">
+            <Timer />
+            <div className="memory-game">
+              {cardsState.map((card) => (
+                <Card
+                  key={card.id}
+                  card={card}
+                  onClick={() => handleClick(card)}
+                  image={card.img}
+                  isMatched={isCardMatched(card)}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 }
