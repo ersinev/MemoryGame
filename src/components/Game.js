@@ -1,4 +1,3 @@
-// Game.js
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
 import { cardsData } from '../cards';
@@ -6,7 +5,7 @@ import Timer from './Timer';
 import PlayerInput from './PlayerInput';
 import { Button, Container } from 'react-bootstrap';
 import Players from './Players';
-import io from 'socket.io-client'; // Import the socket.io-client library
+import io from 'socket.io-client';
 
 function Game() {
   const [cardsState, setCardsState] = useState(cardsData);
@@ -18,7 +17,8 @@ function Game() {
   const [players, setPlayers] = useState([]);
   const [currentTurn, setCurrentTurn] = useState(null);
   const [points, setPoints] = useState({});
-  const [closingCards, setClosingCards] = useState(false); // New state for card closing animation
+  const [closingCards, setClosingCards] = useState(false);
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
     checkForMatch();
@@ -31,32 +31,31 @@ function Game() {
   }, [players]);
 
   useEffect(() => {
-    // Connect to the Socket.io server (adjust the URL as needed)
+    // Connect to the Socket.io server
     const socket = io('http://localhost:5000'); // Replace with your server URL
+    setSocket(socket);
 
     // Emit an event to join a room with a room ID and player name when the game starts
     const roomId = 'your-room-id'; // Replace with your room ID
     const playerName = 'Player1'; // Replace with the player's name
     socket.emit('join-room', roomId, playerName);
 
-    // Listen for events sent from the server
-    socket.on('player-joined', (playerName) => {
-      // Handle a new player joining the room
-      console.log(`${playerName} joined the room`);
+    socket.on('player-joined', (playersInRoom) => {
+      setPlayers(playersInRoom);
+      console.log(`${playersInRoom} joined the room`);
     });
 
-    socket.on('player-left', (playerName) => {
-      // Handle a player leaving the room
-      console.log(`${playerName} left the room`);
+    socket.on('player-left', (playersInRoom) => {
+      setPlayers(playersInRoom);
+      console.log(`${playersInRoom} left the room`);
     });
 
     // Handle game logic, card flips, and points here...
 
-    // Make sure to clean up the socket connection when the component unmounts
     return () => {
       socket.disconnect();
     };
-  }, []); // Empty dependency array to run this effect only once
+  }, []);
 
   const handleClick = (clickedCard) => {
     if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
@@ -83,28 +82,23 @@ function Game() {
 
       if (firstCard.key === secondCard.key) {
         setMatchedPairs([...matchedPairs, firstCard.key]);
-
-        // Award a point to the current player
         const updatedPoints = { ...points };
         updatedPoints[currentTurn] = (updatedPoints[currentTurn] || 0) + 1;
         setPoints(updatedPoints);
 
-        // Wait for a bit (e.g., 1 second) before proceeding with the next turn
         setTimeout(() => {
-          // Continue with the next player's turn
           rotateTurn();
         }, 1000);
       } else {
         setDisableClick(true);
-        setClosingCards(true); // Cards are in the process of closing
+        setClosingCards(true);
 
         setTimeout(() => {
           flipCard(firstCard.id, false);
           flipCard(secondCard.id, false);
           setDisableClick(false);
-          setClosingCards(false); // Cards have closed, enable the next player's turn
+          setClosingCards(false);
 
-          // Continue with the next player's turn
           rotateTurn();
         }, 1000);
       }
@@ -126,6 +120,8 @@ function Game() {
   const handleStartGame = () => {
     setShowEntryPage(false);
     setShowContainer(true);
+    const roomId = 'your-room-id'; // Replace with your room ID
+    socket.emit('start-game', roomId);
     setPlayers(['Player1', 'Player2', 'Player3', 'Player4']);
   };
 
@@ -156,7 +152,7 @@ function Game() {
                   onClick={() => handleClick(card)}
                   image={card.img}
                   isMatched={isCardMatched(card)}
-                  disableClick={disableClick || closingCards} // Disable clicks during card closing animation
+                  disableClick={disableClick || closingCards}
                 />
               ))}
             </div>

@@ -49,6 +49,7 @@
   transition: transform 0.5s;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
   cursor: pointer;
+  
 }
 
 .memory-card:active {
