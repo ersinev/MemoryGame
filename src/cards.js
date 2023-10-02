@@ -3,27 +3,32 @@ const cards = [];
 for (var i = 1; i <= 48; i += 4) {
   const imageIndex = i;
   const explanationIndex = i + 1;
-  
+
   cards.push(
     {
       img: `${imageIndex}.png`,
       id: i,
+      key: i,
     },
     {
       img: `${explanationIndex}.png`,
-      id: i,
+      id: i + 1, // Different id for image and explanation
+      key: i,
     },
     {
       img: `${imageIndex + 2}.png`,
       id: i + 2,
+      key: i + 1,
     },
     {
       img: `${explanationIndex + 2}.png`,
-      id: i + 2,
+      id: i + 3,
+      key: i + 1,
     }
   );
 }
-console.log(cards)
+
+console.log(cards);
 // const cards = [
 //   { id: 1, name: "aurelia", image: aurelia },
 //   { id: 2, name: "aurelia", image: aurelia },
@@ -45,4 +50,4 @@ export const cardsData = cards.map((card) => ({
   isFlipped: false,
 }));
 
-console.log(cardsData)
+console.log(cardsData);
