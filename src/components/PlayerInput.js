@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
 
-function Players() {
+function PlayerInput() {
   return (
     <>
       <Container fluid>
@@ -29,4 +29,4 @@ function Players() {
   );
 }
 
-export default Players;
+export default PlayerInput;

@@ -4,6 +4,7 @@ import { cardsData } from "../cards";
 import Timer from "./Timer";
 import PlayerInput from "./PlayerInput";
 import { Button, Col, Container } from "react-bootstrap";
+import Players from "./Players";
 
 
 
@@ -14,10 +15,11 @@ function Game() {
   const [disableClick, setDisableClick] = useState(false);
   const [showEntryPage, setShowEntryPage] = useState(true); // State to control entry page visibility
   const [showContainer, setShowContainer] = useState(false); // State to control container visibility
-
+  const [players, setPlayers] = useState([])
   useEffect(() => {
     checkForMatch();
   }, [selectedCards]);
+  
 
   const handleClick = (clickedCard) => {
     if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
@@ -67,6 +69,7 @@ function Game() {
   const handleStartGame = () => {
     setShowEntryPage(false); // Hide the entry page
     setShowContainer(true); // Show the container
+    setPlayers(["Player1","Player2","Player3",])
   };
 
   return (
@@ -86,6 +89,7 @@ function Game() {
         {showContainer && (
           <Container className="container-fluid">
             <Timer />
+            <Players players={players}/>
             <div className="memory-game">
               {cardsState.map((card) => (
                 <Card
