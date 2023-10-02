@@ -3,76 +3,57 @@ import Card from "./Card";
 import { cardsData } from "../cards";
 
 function Game() {
-  // states
-  let [cardsState, setCardsState] = useState(cardsData);
-  console.log(cardsState);
-  // kep first card info
-  let [firstCard, setFirstCard] = useState(null);
-  // is it first click?
-  let [secondClick, setSecondClick] = useState(false);
-  // set flag to wait for 1500ms
-  let [wait, setWait] = useState(false);
+  const [cardsState, setCardsState] = useState(cardsData);
+  const [firstCard, setFirstCard] = useState(null);
+  const [secondCard, setSecondCard] = useState(null);
 
-  // functions
-  const checker = async (card) => {
-    if (card.name === firstCard.name) {
-      console.log("hellooo");
-      card["passed"] = true;
-      firstCard["passed"] = true;
-      changeCardStatusHandler(card);
-      changeCardStatusHandler(firstCard);
-    } else {
-      setWait(true);
-      setTimeout(() => {
-        changeCardStatusHandler(card);
-        changeCardStatusHandler(firstCard);
-        setWait(false);
-      }, 1500);
-    }
-  };
-
-  const changeCardStatusHandler = async (clickedCard) => {
-    if (!clickedCard.passed) clickedCard.isFlipped = !clickedCard.isFlipped;
-    let index = cardsState.findIndex((card) => card.id === clickedCard.id);
-    let newState = [...cardsState];
-    newState.splice(index, 1, clickedCard);
-    await setCardsState(newState);
-  };
-
-  const handleClick = async (e, clickedCard) => {
-    if (wait) {
+  const handleClick = (clickedCard) => {
+    if (clickedCard === firstCard || clickedCard === secondCard) {
+      // Avoid clicking on the same card twice
       return;
     }
-    if (!secondClick) {
-      await setFirstCard(clickedCard);
-      await setSecondClick(true);
-      changeCardStatusHandler(clickedCard);
-    } else {
-      await setSecondClick(false);
-      changeCardStatusHandler(clickedCard);
-      checker(clickedCard);
-      setFirstCard(null);
+
+    if (firstCard === null) {
+      // First card click
+      setFirstCard(clickedCard);
+    } else if (secondCard === null) {
+      // Second card click
+      setSecondCard(clickedCard);
     }
+
+    // If both firstCard and secondCard are set, check for a match
+    if (firstCard !== null && secondCard !== null) {
+      if (firstCard.id === secondCard.id) {
+        // Matching pair found
+        markAsMatched(firstCard.id);
+      }
+      // Reset the first and second cards for the next turn
+      setFirstCard(null);
+      setSecondCard(null);
+    }
+  };
+
+  const markAsMatched = (id) => {
+    const updatedCardsState = cardsState.map((card) => {
+      if (card.id === id) {
+        card.matched = true;
+      }
+      return card;
+    });
+    setCardsState(updatedCardsState);
   };
 
   return (
-    
     <section className="memory-game">
-      {cardsState?.map((card) => {
-        return (
-          <>
-            <Card
-              key={card.id}
-              card={card}
-              onClick={(e) => handleClick(e, card)}
-              image={card.img}// Pass the image URL as a prop
-            />
-          </>
-        );
-      })}
-      {/* <Card card={card} onClick={} /> */}
+      {cardsState.map((card) => (
+        <Card
+          key={card.id}
+          card={card}
+          onClick={() => handleClick(card)}
+          image={card.img}
+        />
+      ))}
     </section>
-    
   );
 }
 

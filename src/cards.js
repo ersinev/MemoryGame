@@ -1,26 +1,28 @@
-const cards =[]
+const cards = [];
 
-for (var i = 1; i <= 24; i += 4) {
+for (var i = 1; i <= 48; i += 4) {
+  const imageIndex = i;
+  const explanationIndex = i + 1;
+  
   cards.push(
     {
-      img: `${i}.png`,
+      img: `${imageIndex}.png`,
       id: i,
     },
     {
-      img: `${i + 1}.png`,
+      img: `${explanationIndex}.png`,
       id: i,
     },
     {
-      img: `${i + 2}.png`,
+      img: `${imageIndex + 2}.png`,
       id: i + 2,
     },
     {
-      img: `${i + 3}.png`,
+      img: `${explanationIndex + 2}.png`,
       id: i + 2,
     }
   );
 }
-
 console.log(cards)
 // const cards = [
 //   { id: 1, name: "aurelia", image: aurelia },
