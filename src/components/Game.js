@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import { cardsData } from "../cards";
 import Timer from "./Timer";
+import PlayerInput from "./PlayerInput";
+import { Button, Col, Container } from "react-bootstrap";
 
 
 
@@ -69,20 +71,20 @@ function Game() {
 
   return (
     <>
-      <div className="container">
-        {/* Conditionally render the entry page based on showEntryPage */}
+      <Container fluid >
+        
         {showEntryPage && (
           <div className="entryPage" style={{ color: "white" }}>
-
+            <PlayerInput/>
             
-            <button onClick={handleStartGame}>Start Game</button>
+            <Button onClick={handleStartGame}>Start Game</Button>
             
           </div>
         )}
 
         {/* Conditionally render the container based on showContainer */}
         {showContainer && (
-          <div className="container">
+          <Container className="container-fluid">
             <Timer />
             <div className="memory-game">
               {cardsState.map((card) => (
@@ -95,9 +97,9 @@ function Game() {
                 />
               ))}
             </div>
-          </div>
+          </Container>
         )}
-      </div>
+      </Container>
     </>
   );
 }
