@@ -1,3 +1,4 @@
+// Game.js
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
 import { cardsData } from '../cards';
@@ -5,6 +6,7 @@ import Timer from './Timer';
 import PlayerInput from './PlayerInput';
 import { Button, Container } from 'react-bootstrap';
 import Players from './Players';
+import io from 'socket.io-client'; // Import the socket.io-client library
 
 function Game() {
   const [cardsState, setCardsState] = useState(cardsData);
@@ -28,6 +30,34 @@ function Game() {
     }
   }, [players]);
 
+  useEffect(() => {
+    // Connect to the Socket.io server (adjust the URL as needed)
+    const socket = io('http://localhost:5000'); // Replace with your server URL
+
+    // Emit an event to join a room with a room ID and player name when the game starts
+    const roomId = 'your-room-id'; // Replace with your room ID
+    const playerName = 'Player1'; // Replace with the player's name
+    socket.emit('join-room', roomId, playerName);
+
+    // Listen for events sent from the server
+    socket.on('player-joined', (playerName) => {
+      // Handle a new player joining the room
+      console.log(`${playerName} joined the room`);
+    });
+
+    socket.on('player-left', (playerName) => {
+      // Handle a player leaving the room
+      console.log(`${playerName} left the room`);
+    });
+
+    // Handle game logic, card flips, and points here...
+
+    // Make sure to clean up the socket connection when the component unmounts
+    return () => {
+      socket.disconnect();
+    };
+  }, []); // Empty dependency array to run this effect only once
+
   const handleClick = (clickedCard) => {
     if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
       return;
@@ -50,15 +80,15 @@ function Game() {
   const checkForMatch = () => {
     if (selectedCards.length === 2) {
       const [firstCard, secondCard] = selectedCards;
-  
+
       if (firstCard.key === secondCard.key) {
         setMatchedPairs([...matchedPairs, firstCard.key]);
-  
+
         // Award a point to the current player
         const updatedPoints = { ...points };
         updatedPoints[currentTurn] = (updatedPoints[currentTurn] || 0) + 1;
         setPoints(updatedPoints);
-  
+
         // Wait for a bit (e.g., 1 second) before proceeding with the next turn
         setTimeout(() => {
           // Continue with the next player's turn
@@ -67,18 +97,18 @@ function Game() {
       } else {
         setDisableClick(true);
         setClosingCards(true); // Cards are in the process of closing
-  
+
         setTimeout(() => {
           flipCard(firstCard.id, false);
           flipCard(secondCard.id, false);
           setDisableClick(false);
           setClosingCards(false); // Cards have closed, enable the next player's turn
-  
+
           // Continue with the next player's turn
           rotateTurn();
         }, 1000);
       }
-  
+
       setSelectedCards([]);
     }
   };
