@@ -38,6 +38,7 @@
   perspective: 1000px;
   align-items: center; /* Vertically center cards within each row */
   justify-items: center; /* Horizontally center cards within each column */
+  position: relative;
 }
 
 .memory-card {

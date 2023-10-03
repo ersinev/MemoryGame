@@ -127,7 +127,7 @@ function Game() {
 
   return (
     <>
-      <Container fluid>
+      <div className='container-fluid main'>
         {showEntryPage && (
           <div className='entryPage' style={{ color: 'white' }}>
             <PlayerInput />
@@ -136,7 +136,7 @@ function Game() {
         )}
 
         {showContainer && (
-          <Container className='container-fluid'>
+          <div className='container'>
             <Timer />
             <Players
               players={players}
@@ -156,9 +156,9 @@ function Game() {
                 />
               ))}
             </div>
-          </Container>
+          </div>
         )}
-      </Container>
+      </div>
     </>
   );
 }
