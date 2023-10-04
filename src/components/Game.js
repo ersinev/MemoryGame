@@ -19,6 +19,7 @@ function Game() {
   const [points, setPoints] = useState({});
   const [closingCards, setClosingCards] = useState(false);
   const [socket, setSocket] = useState(null);
+  const [roomId, setRoomId] = useState(""); // State to capture Room ID
 
   useEffect(() => {
     checkForMatch();
@@ -35,19 +36,20 @@ function Game() {
     const socket = io('http://localhost:5000'); // Replace with your server URL
     setSocket(socket);
 
-    // Emit an event to join a room with a room ID and player name when the game starts
-    const roomId = 'your-room-id'; // Replace with your room ID
-    const playerName = 'Player1'; // Replace with the player's name
-    socket.emit('join-room', roomId, playerName);
+    // Handle joining a room with a specified room ID
+    if (roomId) {
+      const playerName = 'Player1'; // Replace with the player's name
+      socket.emit('join-room', roomId, playerName);
+    }
 
     socket.on('player-joined', (playersInRoom) => {
       setPlayers(playersInRoom);
-      console.log(`${playersInRoom} joined the room`);
+      console.log(`${JSON.stringify(playersInRoom)} joined the room`);
     });
 
     socket.on('player-left', (playersInRoom) => {
       setPlayers(playersInRoom);
-      console.log(`${playersInRoom} left the room`);
+      console.log(`${JSON.stringify(playersInRoom)} left the room`);
     });
 
     // Handle game logic, card flips, and points here...
@@ -55,7 +57,7 @@ function Game() {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [roomId]);
 
   const handleClick = (clickedCard) => {
     if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
@@ -108,7 +110,7 @@ function Game() {
   };
 
   const rotateTurn = () => {
-    const currentIndex = players.indexOf(currentTurn);
+    const currentIndex = players.findIndex((player) => player === currentTurn);
     const nextIndex = (currentIndex + 1) % players.length;
     setCurrentTurn(players[nextIndex]);
   };
@@ -120,9 +122,11 @@ function Game() {
   const handleStartGame = () => {
     setShowEntryPage(false);
     setShowContainer(true);
-    const roomId = 'your-room-id'; // Replace with your room ID
-    socket.emit('start-game', roomId);
-    setPlayers(['Player1', 'Player2', 'Player3', 'Player4']);
+    
+    if (roomId) {
+      socket.emit('start-game', roomId);
+      setPlayers(['Player1', 'Player2', 'Player3', 'Player4']);
+    }
   };
 
   return (
@@ -130,7 +134,9 @@ function Game() {
       <div className='container-fluid main'>
         {showEntryPage && (
           <div className='entryPage' style={{ color: 'white' }}>
-            <PlayerInput />
+            <PlayerInput
+              onJoinGame={(enteredRoomId) => setRoomId(enteredRoomId)}
+            />
             <Button onClick={handleStartGame}>Start Game</Button>
           </div>
         )}

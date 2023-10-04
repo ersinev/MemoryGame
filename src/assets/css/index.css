@@ -7,7 +7,8 @@
 #root {
   height: 100vh;
   display: flex;
-  background: #130f40;
+  
+  background: #130f40; 
 }
 .entryPage{
   color: white;
