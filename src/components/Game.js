@@ -38,7 +38,7 @@ function Game() {
 
     // Handle joining a room with a specified room ID
     if (roomId) {
-      const playerName = 'Player1'; // Replace with the player's name
+      const playerName = 'Player1'; 
       socket.emit('join-room', roomId, playerName);
     }
 
@@ -52,7 +52,7 @@ function Game() {
       console.log(`${JSON.stringify(playersInRoom)} left the room`);
     });
 
-    // Handle game logic, card flips, and points here...
+    
 
     return () => {
       socket.disconnect();
