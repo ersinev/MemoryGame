@@ -62,7 +62,7 @@ function Game() {
       return;
     }
 
-    socket.emit('flip-card', roomId, currentPlayerName, clickedCard.id);
+    socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
 
     flipCard(clickedCard.id, true);
     setSelectedCards([...selectedCards, clickedCard]);
@@ -131,7 +131,7 @@ function Game() {
     if (enteredRoomId) {
       socket.emit("start-game", enteredRoomId);
       setCurrentPlayerName(playerName);
-      console.log(enteredRoomId)
+      console.log(enteredRoomId);
     }
   };
 
