@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 
 function Players({ players, currentTurn, onPlayerClick, points }) {
@@ -21,7 +21,7 @@ function Players({ players, currentTurn, onPlayerClick, points }) {
         {players.map((player, index) => (
           <Col
             key={index}
-            md={mdSize} // Use mdSize to set the column size
+            md={mdSize} 
             style={{
               backgroundColor: currentTurn === player ? 'green' : 'transparent',
               padding: '10px',

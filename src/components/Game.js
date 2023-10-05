@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Card from './Card';
-import { cardsData } from '../cards';
-import Timer from './Timer';
-import PlayerInput from './PlayerInput';
-import { Button, Container } from 'react-bootstrap';
-import Players from './Players';
-import io from 'socket.io-client';
+import React, { useState, useEffect } from "react";
+import Card from "./Card";
+import { cardsData } from "../cards";
+import Timer from "./Timer";
+import PlayerInput from "./PlayerInput";
+import Players from "./Players";
+import io from "socket.io-client";
 
 function Game() {
   const [cardsState, setCardsState] = useState(cardsData);
@@ -19,7 +18,34 @@ function Game() {
   const [points, setPoints] = useState({});
   const [closingCards, setClosingCards] = useState(false);
   const [socket, setSocket] = useState(null);
-  const [roomId, setRoomId] = useState(""); // State to capture Room ID
+  const [roomId, setRoomId] = useState("");
+  const [currentPlayerName, setCurrentPlayerName] = useState("");
+  const [gameId, setGameId] = useState(null);
+
+  useEffect(() => {
+    const socket = io("http://localhost:5000"); // Replace with your server URL
+    setSocket(socket);
+
+    if (roomId && currentPlayerName) {
+      socket.emit("join-room", roomId, currentPlayerName);
+    }
+
+    socket.on("player-joined", (playersInRoom) => {
+      setPlayers(playersInRoom);
+    });
+
+    socket.on("player-left", (playersInRoom) => {
+      setPlayers(playersInRoom);
+    });
+
+    socket.on("game-started", (gameId) => {
+      setGameId(gameId);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [roomId, currentPlayerName]);
 
   useEffect(() => {
     checkForMatch();
@@ -31,38 +57,12 @@ function Game() {
     }
   }, [players]);
 
-  useEffect(() => {
-    // Connect to the Socket.io server
-    const socket = io('http://localhost:5000'); // Replace with your server URL
-    setSocket(socket);
-
-    // Handle joining a room with a specified room ID
-    if (roomId) {
-      const playerName = 'Player1'; 
-      socket.emit('join-room', roomId, playerName);
-    }
-
-    socket.on('player-joined', (playersInRoom) => {
-      setPlayers(playersInRoom);
-      console.log(`${JSON.stringify(playersInRoom)} joined the room`);
-    });
-
-    socket.on('player-left', (playersInRoom) => {
-      setPlayers(playersInRoom);
-      console.log(`${JSON.stringify(playersInRoom)} left the room`);
-    });
-
-    
-
-    return () => {
-      socket.disconnect();
-    };
-  }, [roomId]);
-
   const handleClick = (clickedCard) => {
     if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
       return;
     }
+
+    socket.emit('flip-card', roomId, currentPlayerName, clickedCard.id);
 
     flipCard(clickedCard.id, true);
     setSelectedCards([...selectedCards, clickedCard]);
@@ -119,30 +119,33 @@ function Game() {
     return matchedPairs.includes(card.key);
   };
 
-  const handleStartGame = () => {
+  const handleStartGame = (enteredRoomId, playerName) => {
+    if (!enteredRoomId || !playerName) {
+      alert("Please enter your name and room ID.");
+      return;
+    }
+
     setShowEntryPage(false);
     setShowContainer(true);
-    
-    if (roomId) {
-      socket.emit('start-game', roomId);
-      setPlayers(['Player1', 'Player2', 'Player3', 'Player4']);
+
+    if (enteredRoomId) {
+      socket.emit("start-game", enteredRoomId);
+      setCurrentPlayerName(playerName);
+      console.log(enteredRoomId)
     }
   };
 
   return (
     <>
-      <div className='container-fluid main'>
+      <div className="container-fluid main">
         {showEntryPage && (
-          <div className='entryPage' style={{ color: 'white' }}>
-            <PlayerInput
-              onJoinGame={(enteredRoomId) => setRoomId(enteredRoomId)}
-            />
-            <Button onClick={handleStartGame}>Start Game</Button>
+          <div className="entryPage" style={{ color: "white" }}>
+            <PlayerInput onJoinGame={handleStartGame} />
           </div>
         )}
 
         {showContainer && (
-          <div className='container'>
+          <div className="container">
             <Timer />
             <Players
               players={players}
@@ -150,7 +153,7 @@ function Game() {
               onPlayerClick={setCurrentTurn}
               points={points}
             />
-            <div className='memory-game'>
+            <div className="memory-game">
               {cardsState.map((card) => (
                 <Card
                   key={card.id}
