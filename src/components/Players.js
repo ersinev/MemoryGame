@@ -11,7 +11,7 @@ function Players({ players, currentTurn, onPlayerClick, points }) {
   } else if (players.length === 4) {
     mdSize = 3;
   } else {
-    // Default to 12 columns if the number of players doesn't match your conditions
+    
     mdSize = 12;
   }
 
