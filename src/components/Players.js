@@ -2,7 +2,7 @@ import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 
 function Players({ players, currentTurn, onPlayerClick, points }) {
-  // Calculate mdSize based on the number of players
+  
   let mdSize;
   if (players.length === 2) {
     mdSize = 6;
