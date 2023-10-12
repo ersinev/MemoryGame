@@ -3,12 +3,18 @@
   margin: 0;
   box-sizing: border-box;
 }
+.body{
+  overflow: hidden;
+}
 
 #root {
   height: 100vh;
   display: flex;
   
   background: #130f40; 
+}
+.main > .container {
+  max-width: 100%;
 }
 .entryPage{
   color: white;
@@ -33,18 +39,19 @@
   height: 100%;
   margin: auto;
   display: grid;
-  grid-template-columns: repeat(12, 1fr); /* 12 columns */
-  grid-template-rows: repeat(4, 1fr); /* 4 rows */
-  gap: 5px; /* Add some gap between cards */
+  grid-template-columns: repeat(12, 1fr); 
+  grid-template-rows: repeat(4, 1fr); 
+  gap: 5px; 
   perspective: 1000px;
-  align-items: center; /* Vertically center cards within each row */
-  justify-items: center; /* Horizontally center cards within each column */
+  align-items: center; 
+  justify-items: center;
   position: relative;
+  margin-bottom: 30px;
 }
 
 .memory-card {
-  width: 100%; /* Adjust to your desired width */
-  height: 100%; /* Adjust to your desired height */
+  width: 100%;
+  height: 100%;
   margin: auto;
   position: relative;
   transform-style: preserve-3d;
