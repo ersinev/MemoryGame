@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 function Timer() {
-  const countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
+  const countDownDate = new Date("Oct 4, 2024 15:37:25").getTime();
   const [timeRemaining, setTimeRemaining] = useState({
     days: 0,
     hours: 0,
