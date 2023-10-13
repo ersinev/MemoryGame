@@ -1,5 +1,5 @@
 function Card({ card, onClick, image }) {
-  console.log(card)
+
   return (
     <div
       className={`memory-card${card.isFlipped ? " flip" : ""}`}

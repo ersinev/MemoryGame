@@ -28,6 +28,7 @@ function Game() {
 
     if (roomId && currentPlayerName) {
       socket.emit("join-room", roomId, currentPlayerName);
+     
     }
 
     socket.on("player-joined", (playersInRoom) => {
@@ -56,13 +57,16 @@ function Game() {
       setCurrentTurn(players[0]);
     }
   }, [players]);
+  
 
   const handleClick = (clickedCard) => {
     if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
       return;
     }
-
+  
+    // Emit the event to the server
     socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
+  
 
     flipCard(clickedCard.id, true);
     setSelectedCards([...selectedCards, clickedCard]);
@@ -132,6 +136,7 @@ function Game() {
       socket.emit("start-game", enteredRoomId);
       setCurrentPlayerName(playerName);
       console.log(enteredRoomId);
+      setRoomId(enteredRoomId)
     }
   };
 
@@ -140,7 +145,7 @@ function Game() {
       <div className="container-fluid main">
         {showEntryPage && (
           <div className="entryPage" style={{ color: "white" }}>
-            <PlayerInput onJoinGame={handleStartGame} />
+            <PlayerInput onJoinGame={handleStartGame} setTheRoom={setRoomId} />
           </div>
         )}
 

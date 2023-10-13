@@ -28,7 +28,7 @@ function Players({ players, currentTurn, onPlayerClick, points }) {
             }}
             onClick={() => onPlayerClick(player)}
           >
-            {`${player}: ${points[player] || 0}`}
+            {`${player.name}: ${points[player.name] || 0}`}
           </Col>
         ))}
       </Row>
