@@ -40,8 +40,8 @@ function Game() {
     });
 
     socket.on("game-started", (gameId, cardsData) => {
-      setGameId(gameId); // Set gameId state
-      setCardsState(cardsData); // Set cardsState state
+      setGameId(gameId); 
+      setCardsState(cardsData); 
     });
     return () => {
       socket.disconnect();
