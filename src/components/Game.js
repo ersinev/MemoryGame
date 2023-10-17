@@ -39,10 +39,10 @@ function Game() {
       setPlayers(playersInRoom);
     });
 
-    socket.on("game-started", (gameId) => {
-      setGameId(gameId);
+    socket.on("game-started", (gameId, cardsData) => {
+      setGameId(gameId); // Set gameId state
+      setCardsState(cardsData); // Set cardsState state
     });
-
     return () => {
       socket.disconnect();
     };
@@ -133,7 +133,7 @@ function Game() {
     setShowContainer(true);
 
     if (enteredRoomId) {
-      socket.emit("start-game", enteredRoomId);
+      socket.emit("start-game", enteredRoomId,cardsData);
       setCurrentPlayerName(playerName);
       console.log(enteredRoomId);
       setRoomId(enteredRoomId)
