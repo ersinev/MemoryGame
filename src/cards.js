@@ -37,4 +37,5 @@ export const cardsData = cards.map((card) => ({
   isFlipped: false,
 }));
 
-  
+console.log(cardsData);
+

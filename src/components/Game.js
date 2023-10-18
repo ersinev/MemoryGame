@@ -28,7 +28,6 @@ function Game() {
 
     if (roomId && currentPlayerName) {
       socket.emit("join-room", roomId, currentPlayerName);
-     
     }
 
     socket.on("player-joined", (playersInRoom) => {
@@ -40,9 +39,10 @@ function Game() {
     });
 
     socket.on("game-started", (gameId, cardsData) => {
-      setGameId(gameId); 
-      setCardsState(cardsData); 
+      setGameId(gameId);
+      setCardsState(cardsData);
     });
+
     return () => {
       socket.disconnect();
     };
@@ -57,16 +57,14 @@ function Game() {
       setCurrentTurn(players[0]);
     }
   }, [players]);
-  
 
   const handleClick = (clickedCard) => {
     if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
       return;
     }
-  
+
     // Emit the event to the server
     socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
-  
 
     flipCard(clickedCard.id, true);
     setSelectedCards([...selectedCards, clickedCard]);
@@ -133,10 +131,9 @@ function Game() {
     setShowContainer(true);
 
     if (enteredRoomId) {
-      socket.emit("start-game", enteredRoomId,cardsData);
+      socket.emit("start-game", enteredRoomId, cardsData);
       setCurrentPlayerName(playerName);
-      console.log(enteredRoomId);
-      setRoomId(enteredRoomId)
+      setRoomId(enteredRoomId);
     }
   };
 
