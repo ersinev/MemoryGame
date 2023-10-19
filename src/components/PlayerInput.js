@@ -7,13 +7,13 @@ function PlayerInput({ onJoinGame }) {
   const [roomId, setRoomId] = useState("");
 
   const handleStartGame = () => {
-    // Check if name and roomId are not empty
+    
     if (name.trim() === "" || roomId.trim() === "") {
       alert("Please enter your name and room ID.");
       return;
     }
 
-    // Pass the roomId and name to the parent component
+    
     onJoinGame(roomId, name);
   };
 

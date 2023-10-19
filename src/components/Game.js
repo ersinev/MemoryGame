@@ -63,7 +63,6 @@ function Game() {
       return;
     }
 
- 
     socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
 
     flipCard(clickedCard.id, true);
