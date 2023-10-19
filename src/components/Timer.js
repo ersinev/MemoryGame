@@ -45,8 +45,9 @@ function Timer() {
   }, [countDownDate]);
 
   return (
-    <div style={{backgroundColor:"white"}}>
-      {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}m {timeRemaining.seconds}s
+    <div style={{ backgroundColor: "white" }}>
+      {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}m{" "}
+      {timeRemaining.seconds}s
     </div>
   );
 }
