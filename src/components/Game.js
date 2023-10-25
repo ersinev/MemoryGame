@@ -23,7 +23,7 @@ function Game() {
   const [gameId, setGameId] = useState(null);
 
   useEffect(() => {
-    const socket = io("http://localhost:5000"); // Replace with server URL
+    const socket = io("http://localhost:5000"); // Replace with server 
     setSocket(socket);
 
     if (roomId && currentPlayerName) {
