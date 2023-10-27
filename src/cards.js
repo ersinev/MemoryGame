@@ -28,7 +28,6 @@ for (var i = 1; i <= 48; i += 4) {
   );
 }
 
-console.log(cards);
 
 
 export const cardsData = cards.map((card) => ({
@@ -37,5 +36,5 @@ export const cardsData = cards.map((card) => ({
   isFlipped: false,
 }));
 
-console.log(cardsData);
+
 

@@ -1,3 +1,5 @@
+// Game.js
+
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import { cardsData } from "../cards";
@@ -23,7 +25,7 @@ function Game() {
   const [gameId, setGameId] = useState(null);
 
   useEffect(() => {
-    const socket = io("http://localhost:5000"); // Replace with server 
+    const socket = io("http://localhost:5000");
     setSocket(socket);
 
     if (roomId && currentPlayerName) {
@@ -41,6 +43,10 @@ function Game() {
     socket.on("game-started", (gameId, cardsData) => {
       setGameId(gameId);
       setCardsState(cardsData);
+    });
+
+    socket.on("turn-change", (newTurn) => {
+      setCurrentTurn(newTurn);
     });
 
     return () => {
@@ -114,6 +120,7 @@ function Game() {
     const currentIndex = players.findIndex((player) => player === currentTurn);
     const nextIndex = (currentIndex + 1) % players.length;
     setCurrentTurn(players[nextIndex]);
+    socket.emit("end-turn", roomId);
   };
 
   const isCardMatched = (card) => {
