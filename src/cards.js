@@ -12,7 +12,7 @@ for (var i = 1; i <= 48; i += 4) {
     },
     {
       img: `${explanationIndex}.png`,
-      id: i + 1, // Different id for image and explanation
+      id: i + 1,
       key: i,
     },
     {
