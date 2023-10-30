@@ -22,7 +22,7 @@ function Players({ players, currentTurn, onPlayerClick, points }) {
             key={index}
             md={mdSize} 
             style={{
-              backgroundColor: currentTurn === player.id ? 'green' : 'transparent', // Compare with player.id
+              backgroundColor: currentTurn === player.id ? 'green' : 'transparent', 
               padding: '10px',
             }}
             onClick={() => onPlayerClick(player)}
