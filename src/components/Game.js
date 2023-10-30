@@ -67,7 +67,7 @@ function Game() {
       return;
     }
   
-    // Check if it's the user's turn before allowing card flipping
+    
     if (currentTurn === socket.id) {
       socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
       flipCard(clickedCard.id, true);
