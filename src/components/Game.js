@@ -1,5 +1,3 @@
-// Game.js
-
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import { cardsData } from "../cards";
@@ -68,11 +66,13 @@ function Game() {
     if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
       return;
     }
-
-    socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
-
-    flipCard(clickedCard.id, true);
-    setSelectedCards([...selectedCards, clickedCard]);
+  
+    // Check if it's the user's turn before allowing card flipping
+    if (currentTurn === socket.id) {
+      socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
+      flipCard(clickedCard.id, true);
+      setSelectedCards([...selectedCards, clickedCard]);
+    }
   };
 
   const flipCard = (id, isFlipped) => {
