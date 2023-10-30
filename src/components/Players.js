@@ -11,7 +11,6 @@ function Players({ players, currentTurn, onPlayerClick, points }) {
   } else if (players.length === 4) {
     mdSize = 3;
   } else {
-    
     mdSize = 12;
   }
 
@@ -23,7 +22,7 @@ function Players({ players, currentTurn, onPlayerClick, points }) {
             key={index}
             md={mdSize} 
             style={{
-              backgroundColor: currentTurn === player ? 'green' : 'transparent',
+              backgroundColor: currentTurn === player.id ? 'green' : 'transparent', // Compare with player.id
               padding: '10px',
             }}
             onClick={() => onPlayerClick(player)}
