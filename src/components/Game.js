@@ -21,6 +21,10 @@ function Game() {
   const [roomId, setRoomId] = useState("");
   const [currentPlayerName, setCurrentPlayerName] = useState("");
   const [gameId, setGameId] = useState(null);
+  const [gameState, setGameState] = useState({
+    turnedCards: [],
+    matchedPairs: [],
+  }); // Add gameState state variable
 
   useEffect(() => {
     const socket = io("http://localhost:5000");
@@ -47,6 +51,11 @@ function Game() {
       setCurrentTurn(newTurn);
     });
 
+    // Add an event listener for updating the game state
+    socket.on("update-game-state", (updatedGameState) => {
+      setGameState(updatedGameState);
+    });
+
     return () => {
       socket.disconnect();
     };
@@ -66,8 +75,7 @@ function Game() {
     if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
       return;
     }
-  
-    
+
     if (currentTurn === socket.id) {
       socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
       flipCard(clickedCard.id, true);
@@ -169,6 +177,9 @@ function Game() {
                   onClick={() => handleClick(card)}
                   image={card.img}
                   isMatched={isCardMatched(card)}
+                  isTurned={gameState.turnedCards.some(
+                    (turn) => turn.cardId === card.id
+                  )}
                   disableClick={disableClick || closingCards}
                 />
               ))}
