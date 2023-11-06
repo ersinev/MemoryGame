@@ -1,8 +1,7 @@
-import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import React from "react";
+import { Col, Container, Row } from "react-bootstrap";
 
 function Players({ players, currentTurn, onPlayerClick, points }) {
-  
   let mdSize;
   if (players.length === 2) {
     mdSize = 6;
@@ -15,15 +14,16 @@ function Players({ players, currentTurn, onPlayerClick, points }) {
   }
 
   return (
-    <Container fluid className='players'>
+    <Container fluid className="players">
       <Row>
         {players.map((player, index) => (
           <Col
             key={index}
-            md={mdSize} 
+            md={mdSize}
             style={{
-              backgroundColor: currentTurn === player.id ? 'green' : 'transparent', 
-              padding: '10px',
+              backgroundColor:
+                currentTurn === player.id ? "green" : "transparent",
+              padding: "10px",
             }}
             onClick={() => onPlayerClick(player)}
           >
