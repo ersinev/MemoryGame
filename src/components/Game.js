@@ -1,3 +1,5 @@
+// Game.js
+
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import { cardsData } from "../cards";
@@ -24,7 +26,7 @@ function Game() {
   const [gameState, setGameState] = useState({
     turnedCards: [],
     matchedPairs: [],
-  }); // Add gameState state variable
+  });
 
   useEffect(() => {
     const socket = io("http://localhost:5000");
@@ -51,7 +53,6 @@ function Game() {
       setCurrentTurn(newTurn);
     });
 
-    // Add an event listener for updating the game state
     socket.on("update-game-state", (updatedGameState) => {
       setGameState(updatedGameState);
     });
@@ -64,12 +65,6 @@ function Game() {
   useEffect(() => {
     checkForMatch();
   }, [selectedCards]);
-
-  useEffect(() => {
-    if (players.length > 0) {
-      setCurrentTurn(players[0]);
-    }
-  }, [players]);
 
   const handleClick = (clickedCard) => {
     if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
@@ -125,9 +120,6 @@ function Game() {
   };
 
   const rotateTurn = () => {
-    const currentIndex = players.findIndex((player) => player === currentTurn);
-    const nextIndex = (currentIndex + 1) % players.length;
-    setCurrentTurn(players[nextIndex]);
     socket.emit("end-turn", roomId);
   };
 
@@ -166,7 +158,6 @@ function Game() {
             <Players
               players={players}
               currentTurn={currentTurn}
-              onPlayerClick={setCurrentTurn}
               points={points}
             />
             <div className="memory-game">
