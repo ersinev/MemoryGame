@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
 function AdminPanel() {
-  const [onlineUsersArr, setOnlineUsersArr] = useState([]);
   const [roomData, setRoomData] = useState({});
-  const [onlineUsers, setOnlineUsers] = useState("");
+  const [totalOnlineUsers, setTotalOnlineUsers] = useState(0);
 
   useEffect(() => {
     const adminSocket = io("http://localhost:5000", {
@@ -13,8 +12,19 @@ function AdminPanel() {
     });
 
     adminSocket.on("online-users", (data) => {
-      setOnlineUsersArr(data);
-      setOnlineUsers(data.length - 1);
+      setTotalOnlineUsers((prevCount) => {
+        let updatedCount = prevCount;
+
+        if (data.added && data.added !== "admin") {
+          updatedCount += 1;
+        }
+
+        if (data.removed && data.removed !== "admin") {
+          updatedCount -= 1;
+        }
+
+        return updatedCount;
+      });
     });
 
     adminSocket.on("room-data", (data) => {
@@ -31,16 +41,21 @@ function AdminPanel() {
   return (
     <div style={{ color: "black", backgroundColor: "whitesmoke" }}>
       <h2>Admin Panel</h2>
-      <h3>Online Users: {onlineUsers}</h3>
-      <ul>
-        {Object.keys(roomData).map((roomKey) => (
-          <li key={roomKey}>
-            {roomKey}: {roomData[roomKey].players.length} users in the room
-          </li>
-        ))}
-      </ul>
-      <h3>Room Data</h3>
-      <pre>{JSON.stringify(roomData, null, 2)}</pre>
+      
+      {Object.keys(roomData).map((roomId) => (
+        <div key={roomId}>
+          <p>
+            Room ID: {roomId}, Total Users: {roomData[roomId].players.length}
+          </p>
+          <ul>
+            {roomData[roomId].players.map((player) => (
+              <li key={player.id}>
+                {player.name} (ID: {player.id})
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 }

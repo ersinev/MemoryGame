@@ -1,3 +1,4 @@
+
 function Card({ card, onClick, image }) {
   return (
     <div
