@@ -55,6 +55,11 @@ function Game() {
       setGameState(updatedGameState);
     });
 
+    socket.on("flip-card", (playerName, cardId) => {
+      // Update the game state to show the flipped card
+      updateCardState(cardId, true);
+    });
+
     return () => {
       socket.disconnect();
     };
@@ -64,6 +69,14 @@ function Game() {
     checkForMatch();
   }, [selectedCards]);
 
+  const updateCardState = (cardId, isFlipped) => {
+    setCardsState((prevState) =>
+      prevState.map((card) =>
+        card.id === cardId ? { ...card, isFlipped } : card
+      )
+    );
+  };
+
   const handleClick = (clickedCard) => {
     if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
       return;
@@ -71,19 +84,9 @@ function Game() {
 
     if (currentTurn === socket.id) {
       socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
-      flipCard(clickedCard.id, true);
+      updateCardState(clickedCard.id, true);
       setSelectedCards([...selectedCards, clickedCard]);
     }
-  };
-
-  const flipCard = (id, isFlipped) => {
-    const updatedCardsState = cardsState.map((card) => {
-      if (card.id === id) {
-        card.isFlipped = isFlipped;
-      }
-      return card;
-    });
-    setCardsState(updatedCardsState);
   };
 
   const checkForMatch = () => {
@@ -104,8 +107,8 @@ function Game() {
         setClosingCards(true);
 
         setTimeout(() => {
-          flipCard(firstCard.id, false);
-          flipCard(secondCard.id, false);
+          updateCardState(firstCard.id, false);
+          updateCardState(secondCard.id, false);
           setDisableClick(false);
           setClosingCards(false);
 
