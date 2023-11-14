@@ -60,6 +60,11 @@ function Game() {
       updateCardState(cardId, true);
     });
 
+    socket.on("close-cards", (cardIds) => {
+      // Update the game state to close the specified cards
+      closeCards(cardIds);
+    });
+
     return () => {
       socket.disconnect();
     };
@@ -73,6 +78,14 @@ function Game() {
     setCardsState((prevState) =>
       prevState.map((card) =>
         card.id === cardId ? { ...card, isFlipped } : card
+      )
+    );
+  };
+
+  const closeCards = (cardIds) => {
+    setCardsState((prevState) =>
+      prevState.map((card) =>
+        cardIds.includes(card.id) ? { ...card, isFlipped: false } : card
       )
     );
   };
@@ -107,8 +120,9 @@ function Game() {
         setClosingCards(true);
 
         setTimeout(() => {
-          updateCardState(firstCard.id, false);
-          updateCardState(secondCard.id, false);
+          const closingCardIds = selectedCards.map((card) => card.id);
+          closeCards(closingCardIds);
+
           setDisableClick(false);
           setClosingCards(false);
 
