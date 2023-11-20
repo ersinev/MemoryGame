@@ -83,11 +83,13 @@ function Game() {
   };
 
   const closeCards = (cardIds) => {
-    setCardsState((prevState) =>
-      prevState.map((card) =>
+    setCardsState((prevState) => {
+      const updatedState = prevState.map((card) =>
         cardIds.includes(card.id) ? { ...card, isFlipped: false } : card
-      )
-    );
+      );
+  
+      return updatedState;
+    });
   };
 
   const handleClick = (clickedCard) => {
@@ -105,31 +107,35 @@ function Game() {
   const checkForMatch = () => {
     if (selectedCards.length === 2) {
       const [firstCard, secondCard] = selectedCards;
-
+  
       if (firstCard.key === secondCard.key) {
         setMatchedPairs([...matchedPairs, firstCard.key]);
         const updatedPoints = { ...points };
         updatedPoints[currentTurn] = (updatedPoints[currentTurn] || 0) + 1;
         setPoints(updatedPoints);
-
+  
+        console.log("Match found. Rotating turn...");
         setTimeout(() => {
           rotateTurn();
         }, 1000);
       } else {
+        console.log("No match. Closing cards...");
+  
         setDisableClick(true);
         setClosingCards(true);
-
+  
         setTimeout(() => {
           const closingCardIds = selectedCards.map((card) => card.id);
           closeCards(closingCardIds);
-
+  
           setDisableClick(false);
           setClosingCards(false);
-
+  
+          console.log("Closed cards. Rotating turn...");
           rotateTurn();
         }, 1000);
       }
-
+  
       setSelectedCards([]);
     }
   };
