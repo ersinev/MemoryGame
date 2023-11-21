@@ -60,10 +60,12 @@ function Game() {
       updateCardState(cardId, true);
     });
 
-    socket.on("close-cards", (cardIds) => {
-      // Update the game state to close the specified cards
-      closeCards(cardIds);
-    });
+    socket.on("close-cards", (roomId, cardIds) => {
+      // Broadcast to all clients in the room
+      io.to(roomId).emit("close-cards", cardIds);
+  
+      
+  });
 
     return () => {
       socket.disconnect();
@@ -80,6 +82,8 @@ function Game() {
         card.id === cardId ? { ...card, isFlipped } : card
       )
     );
+
+    console.log("cards are opened")
   };
 
   const closeCards = (cardIds) => {
@@ -87,22 +91,21 @@ function Game() {
       const updatedState = prevState.map((card) =>
         cardIds.includes(card.id) ? { ...card, isFlipped: false } : card
       );
-  
+
+      console.log("closing the cards")
+
       return updatedState;
     });
   };
 
   const handleClick = (clickedCard) => {
-    if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick) {
-      return;
+    if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick || currentTurn !== socket.id) {
+        return;
     }
 
-    if (currentTurn === socket.id) {
-      socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
-      updateCardState(clickedCard.id, true);
-      setSelectedCards([...selectedCards, clickedCard]);
-    }
-  };
+    socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
+    setSelectedCards([...selectedCards, clickedCard]);
+};
 
   const checkForMatch = () => {
     if (selectedCards.length === 2) {
@@ -158,9 +161,10 @@ function Game() {
     setShowContainer(true);
 
     if (enteredRoomId) {
-      socket.emit("start-game", enteredRoomId, cardsData);
+      //socket.emit("start-game", enteredRoomId, cardsData);
       setCurrentPlayerName(playerName);
       setRoomId(enteredRoomId);
+      console.log("game is started")
     }
   };
 
