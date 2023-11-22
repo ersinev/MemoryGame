@@ -1,3 +1,5 @@
+// Game.js
+
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import { cardsData } from "../cards";
@@ -63,9 +65,7 @@ function Game() {
     socket.on("close-cards", (roomId, cardIds) => {
       // Broadcast to all clients in the room
       io.to(roomId).emit("close-cards", cardIds);
-  
-      
-  });
+    });
 
     return () => {
       socket.disconnect();
@@ -82,8 +82,6 @@ function Game() {
         card.id === cardId ? { ...card, isFlipped } : card
       )
     );
-
-    console.log("cards are opened")
   };
 
   const closeCards = (cardIds) => {
@@ -92,20 +90,23 @@ function Game() {
         cardIds.includes(card.id) ? { ...card, isFlipped: false } : card
       );
 
-      console.log("closing the cards")
-
       return updatedState;
     });
   };
 
   const handleClick = (clickedCard) => {
-    if (clickedCard.isFlipped || selectedCards.length >= 2 || disableClick || currentTurn !== socket.id) {
-        return;
+    if (
+      clickedCard.isFlipped ||
+      selectedCards.length >= 2 ||
+      disableClick ||
+      currentTurn !== socket.id
+    ) {
+      return;
     }
 
     socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
     setSelectedCards([...selectedCards, clickedCard]);
-};
+  };
 
   const checkForMatch = () => {
     if (selectedCards.length === 2) {
@@ -117,13 +118,10 @@ function Game() {
         updatedPoints[currentTurn] = (updatedPoints[currentTurn] || 0) + 1;
         setPoints(updatedPoints);
 
-        console.log("Match found. Rotating turn...");
         setTimeout(() => {
           rotateTurn();
         }, 1000);
       } else {
-        console.log("No match. Closing cards...");
-
         setDisableClick(true);
         setClosingCards(true);
 
@@ -134,7 +132,6 @@ function Game() {
           setDisableClick(false);
           setClosingCards(false);
 
-          console.log("Closed cards. Rotating turn...");
           rotateTurn();
         }, 1000);
       }
@@ -161,10 +158,8 @@ function Game() {
     setShowContainer(true);
 
     if (enteredRoomId) {
-      //socket.emit("start-game", enteredRoomId, cardsData);
       setCurrentPlayerName(playerName);
       setRoomId(enteredRoomId);
-      console.log("game is started")
     }
   };
 
