@@ -149,18 +149,15 @@ function Game() {
   };
 
   const handleStartGame = (enteredRoomId, playerName) => {
-    if (!enteredRoomId || !playerName) {
-      alert("Please enter your name and room ID.");
-      return;
-    }
+
 
     setShowEntryPage(false);
     setShowContainer(true);
 
-    if (enteredRoomId) {
-      setCurrentPlayerName(playerName);
-      setRoomId(enteredRoomId);
-    }
+
+    setCurrentPlayerName(playerName);
+    setRoomId(enteredRoomId);
+
   };
 
   return (
