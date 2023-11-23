@@ -62,10 +62,19 @@ function Game() {
       updateCardState(cardId, true);
     });
 
-    socket.on("close-cards", (roomId, cardIds) => {
-      // Broadcast to all clients in the room
-      io.to(roomId).emit("close-cards", cardIds);
+    socket.on("close-cards", (updatedGameState) => {
+      setGameState(updatedGameState);
+  
+      const closingCardIds = updatedGameState.turnedCards
+        .filter((turn) => !turn.isFlipped)
+        .map((turn) => turn.cardId);
+  
+      // Close the cards for all players
+      closeCards(closingCardIds);
     });
+  
+  
+  
 
     return () => {
       socket.disconnect();
