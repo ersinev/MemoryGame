@@ -23,6 +23,8 @@ function Game() {
   const [roomId, setRoomId] = useState("");
   const [currentPlayerName, setCurrentPlayerName] = useState("");
   const [gameId, setGameId] = useState(null);
+  const [gameStartTime, setGameStartTime] = useState(null);
+  const [remainingTime, setRemainingTime] = useState(30 * 60 * 1000); // 30 minutes in milliseconds
   const [gameState, setGameState] = useState({
     turnedCards: [],
     matchedPairs: [],
@@ -44,9 +46,10 @@ function Game() {
       setPlayers(playersInRoom);
     });
 
-    socket.on("game-started", (gameId, cardsData) => {
+    socket.on("game-started", (gameId, cardsData, startTime) => {
       setGameId(gameId);
       setCardsState(cardsData);
+      setGameStartTime(startTime);
     });
 
     socket.on("turn-change", (newTurn) => {
@@ -64,17 +67,14 @@ function Game() {
 
     socket.on("close-cards", (updatedGameState) => {
       setGameState(updatedGameState);
-  
+
       const closingCardIds = updatedGameState.turnedCards
         .filter((turn) => !turn.isFlipped)
         .map((turn) => turn.cardId);
-  
+
       // Close the cards for all players
       closeCards(closingCardIds);
     });
-  
-  
-  
 
     return () => {
       socket.disconnect();
@@ -84,6 +84,28 @@ function Game() {
   useEffect(() => {
     checkForMatch();
   }, [selectedCards]);
+
+  useEffect(() => {
+    if (gameStartTime) {
+      const timerInterval = setInterval(() => {
+        setRemainingTime((prevRemainingTime) => {
+          const currentTime = Date.now();
+          const elapsedTime = currentTime - gameStartTime;
+          const newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
+  
+          // If the new remaining time is the same, clear the interval
+          if (newRemainingTime === prevRemainingTime) {
+            clearInterval(timerInterval);
+          }
+  
+          return newRemainingTime;
+        });
+      }, 1000);
+  
+      // Cleanup interval on component unmount or when game ends
+      return () => clearInterval(timerInterval);
+    }
+  }, [gameStartTime]);
 
   const updateCardState = (cardId, isFlipped) => {
     setCardsState((prevState) =>
@@ -158,15 +180,21 @@ function Game() {
   };
 
   const handleStartGame = (enteredRoomId, playerName) => {
-
-
     setShowEntryPage(false);
     setShowContainer(true);
-
-
     setCurrentPlayerName(playerName);
     setRoomId(enteredRoomId);
+  };
 
+  const calculateRemainingTime = () => {
+    if (!gameStartTime) {
+      return remainingTime; // Return the remaining time as is if gameStartTime is not set
+    }
+
+    const currentTime = Date.now();
+    const elapsedTime = currentTime - gameStartTime;
+    const newRemainingTime = Math.max(0, remainingTime - elapsedTime); // Calculate remaining time
+    return newRemainingTime;
   };
 
   return (
@@ -180,7 +208,7 @@ function Game() {
 
         {showContainer && (
           <div className="container">
-            <Timer />
+            <Timer remainingTime={remainingTime} />
             <Players
               players={players}
               currentTurn={currentTurn}
