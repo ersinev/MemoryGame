@@ -105,7 +105,7 @@ function Game() {
       // Cleanup interval on component unmount or when game ends
       return () => clearInterval(timerInterval);
     }
-  }, [gameStartTime]);
+  }, [gameStartTime, remainingTime]);
 
   const updateCardState = (cardId, isFlipped) => {
     setCardsState((prevState) =>
@@ -186,16 +186,7 @@ function Game() {
     setRoomId(enteredRoomId);
   };
 
-  const calculateRemainingTime = () => {
-    if (!gameStartTime) {
-      return remainingTime; // Return the remaining time as is if gameStartTime is not set
-    }
 
-    const currentTime = Date.now();
-    const elapsedTime = currentTime - gameStartTime;
-    const newRemainingTime = Math.max(0, remainingTime - elapsedTime); // Calculate remaining time
-    return newRemainingTime;
-  };
 
   return (
     <>
