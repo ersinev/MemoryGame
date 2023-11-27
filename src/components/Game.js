@@ -1,5 +1,3 @@
-// Game.js
-
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import { cardsData } from "../cards";
@@ -61,20 +59,29 @@ function Game() {
     });
 
     socket.on("flip-card", (playerName, cardId) => {
-      // Update the game state to show the flipped card
+      
       updateCardState(cardId, true);
     });
 
     socket.on("close-cards", (updatedGameState) => {
-      setGameState(updatedGameState);
-
-      const closingCardIds = updatedGameState.turnedCards
-        .filter((turn) => !turn.isFlipped)
-        .map((turn) => turn.cardId);
-
-      // Close the cards for all players
-      closeCards(closingCardIds);
+      // Use a callback to ensure the state is updated after receiving the updated game state
+      setGameState((prevGameState) => {
+        // Update the game state with the received data
+        const newGameState = { ...prevGameState, ...updatedGameState };
+    
+        // Extract the card ids to be closed
+        const closingCardIds = newGameState.turnedCards
+          .filter((turn) => !turn.isFlipped)
+          .map((turn) => turn.cardId);
+    
+        // Close the cards
+        closeCards(closingCardIds);
+    
+        // Return the updated game state
+        return newGameState;
+      });
     });
+    
 
     return () => {
       socket.disconnect();
@@ -115,15 +122,15 @@ function Game() {
     );
   };
 
-  const closeCards = (cardIds) => {
+  function closeCards(cardIds) {
     setCardsState((prevState) => {
       const updatedState = prevState.map((card) =>
         cardIds.includes(card.id) ? { ...card, isFlipped: false } : card
       );
-
+  
       return updatedState;
     });
-  };
+  }
 
   const handleClick = (clickedCard) => {
     if (
@@ -142,34 +149,35 @@ function Game() {
   const checkForMatch = () => {
     if (selectedCards.length === 2) {
       const [firstCard, secondCard] = selectedCards;
-
+  
       if (firstCard.key === secondCard.key) {
         setMatchedPairs([...matchedPairs, firstCard.key]);
-        const updatedPoints = { ...points };
-        updatedPoints[currentTurn] = (updatedPoints[currentTurn] || 0) + 1;
-        setPoints(updatedPoints);
-
+        setPoints((prevPoints) => {
+          const updatedPoints = { ...prevPoints };
+          const currentPlayerId = currentTurn;
+          updatedPoints[currentPlayerId] = (updatedPoints[currentPlayerId] || 0) + 1;
+          return updatedPoints;
+        });
+  
         setTimeout(() => {
           rotateTurn();
         }, 1000);
       } else {
         setDisableClick(true);
-        setClosingCards(true);
-
+  
         setTimeout(() => {
           const closingCardIds = selectedCards.map((card) => card.id);
           closeCards(closingCardIds);
-
+  
           setDisableClick(false);
-          setClosingCards(false);
-
           rotateTurn();
         }, 1000);
       }
-
+  
       setSelectedCards([]);
     }
   };
+  
 
   const rotateTurn = () => {
     socket.emit("end-turn", roomId);
@@ -204,6 +212,7 @@ function Game() {
               players={players}
               currentTurn={currentTurn}
               points={points}
+              setPoints={setPoints}
             />
             <div className="memory-game">
               {cardsState.map((card) => (

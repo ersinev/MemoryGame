@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
-function Players({ players, currentTurn, onPlayerClick, points }) {
+function Players({ players, currentTurn, onPlayerClick, points, setPoints }) {
   let mdSize;
   if (players.length === 2) {
     mdSize = 6;
@@ -27,7 +27,7 @@ function Players({ players, currentTurn, onPlayerClick, points }) {
             }}
             onClick={() => onPlayerClick(player)}
           >
-            {`${player.name}: ${points[player.name] || 0}`}
+            {`${player.name}: ${points[player.id] || 0}`}
           </Col>
         ))}
       </Row>
