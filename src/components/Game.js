@@ -34,55 +34,49 @@ function Game() {
 
     if (roomId && currentPlayerName) {
       socket.emit("join-room", roomId, currentPlayerName);
+      console.log("this workeda")
     }
 
     socket.on("player-joined", (playersInRoom) => {
       setPlayers(playersInRoom);
+      console.log("this workedb")
     });
 
     socket.on("player-left", (playersInRoom) => {
       setPlayers(playersInRoom);
+      console.log("this workedc")
     });
 
     socket.on("game-started", (gameId, cardsData, startTime) => {
       setGameId(gameId);
       setCardsState(cardsData);
       setGameStartTime(startTime);
+      console.log("this workedd")
     });
 
     socket.on("turn-change", (newTurn) => {
       setCurrentTurn(newTurn);
+      console.log("this workede")
     });
 
+   
     socket.on("update-game-state", (updatedGameState) => {
       setGameState(updatedGameState);
-    });
-
+      console.log("this workedf");
+  });
+  
+  socket.on("close-cards", (closedCardIds) => {
+      closeCards(closedCardIds);
+  });
+  
+  
+  
     socket.on("flip-card", (playerName, cardId) => {
-      
+
       updateCardState(cardId, true);
     });
 
-    socket.on("close-cards", (updatedGameState) => {
-      // Use a callback to ensure the state is updated after receiving the updated game state
-      setGameState((prevGameState) => {
-        // Update the game state with the received data
-        const newGameState = { ...prevGameState, ...updatedGameState };
-    
-        // Extract the card ids to be closed
-        const closingCardIds = newGameState.turnedCards
-          .filter((turn) => !turn.isFlipped)
-          .map((turn) => turn.cardId);
-    
-        // Close the cards
-        closeCards(closingCardIds);
-    
-        // Return the updated game state
-        return newGameState;
-      });
-    });
-    
-
+  
     return () => {
       socket.disconnect();
     };
@@ -99,16 +93,16 @@ function Game() {
           const currentTime = Date.now();
           const elapsedTime = currentTime - gameStartTime;
           const newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
-  
+
           // If the new remaining time is the same, clear the interval
           if (newRemainingTime === prevRemainingTime) {
             clearInterval(timerInterval);
           }
-  
+
           return newRemainingTime;
         });
       }, 1000);
-  
+
       // Cleanup interval on component unmount or when game ends
       return () => clearInterval(timerInterval);
     }
@@ -122,12 +116,12 @@ function Game() {
     );
   };
 
-  function closeCards(cardIds) {
+  function closeCards(closedCardIds) {
     setCardsState((prevState) => {
       const updatedState = prevState.map((card) =>
-        cardIds.includes(card.id) ? { ...card, isFlipped: false } : card
+        closedCardIds.includes(card.id) ? { ...card, isFlipped: false } : card
       );
-  
+
       return updatedState;
     });
   }
@@ -149,7 +143,7 @@ function Game() {
   const checkForMatch = () => {
     if (selectedCards.length === 2) {
       const [firstCard, secondCard] = selectedCards;
-  
+
       if (firstCard.key === secondCard.key) {
         setMatchedPairs([...matchedPairs, firstCard.key]);
         setPoints((prevPoints) => {
@@ -158,26 +152,26 @@ function Game() {
           updatedPoints[currentPlayerId] = (updatedPoints[currentPlayerId] || 0) + 1;
           return updatedPoints;
         });
-  
+
         setTimeout(() => {
           rotateTurn();
         }, 1000);
       } else {
         setDisableClick(true);
-  
+
         setTimeout(() => {
           const closingCardIds = selectedCards.map((card) => card.id);
           closeCards(closingCardIds);
-  
+
           setDisableClick(false);
           rotateTurn();
         }, 1000);
       }
-  
+
       setSelectedCards([]);
     }
   };
-  
+
 
   const rotateTurn = () => {
     socket.emit("end-turn", roomId);
