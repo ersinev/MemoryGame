@@ -27,21 +27,23 @@ function AdminPanel() {
       });
     });
 
+  setInterval(()=>{
     adminSocket.on("room-data", (data) => {
       setRoomData(data);
     });
+  },1000)
 
     adminSocket.emit("join-room", "admin");
 
-    return () => {
-      adminSocket.disconnect();
-    };
+    // return () => {
+    //   adminSocket.disconnect();
+    // };
   }, []);
 
   return (
     <div style={{ color: "black", backgroundColor: "whitesmoke" }}>
       <h2>Admin Panel</h2>
-      
+      {console.log(roomData)}
       {Object.keys(roomData).map((roomId) => (
         <div key={roomId}>
           <p>

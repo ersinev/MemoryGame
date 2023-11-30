@@ -59,24 +59,25 @@ function Game() {
       console.log("this workede")
     });
 
-   
+
     socket.on("update-game-state", (updatedGameState) => {
       setGameState(updatedGameState);
       console.log("this workedf");
-  });
-  
-  socket.on("close-cards", (closedCardIds) => {
+    });
+
+    socket.on("close-cards", (closedCardIds) => {
       closeCards(closedCardIds);
-  });
-  
-  
-  
+    });
+
     socket.on("flip-card", (playerName, cardId) => {
 
       updateCardState(cardId, true);
     });
 
-  
+    socket.on("update-points",(updatedPoints)=>{
+      setPoints(updatedPoints);
+    })
+
     return () => {
       socket.disconnect();
     };
@@ -138,20 +139,28 @@ function Game() {
 
     socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
     setSelectedCards([...selectedCards, clickedCard]);
-  };
 
+  };
   const checkForMatch = () => {
-    if (selectedCards.length === 2) {
+    if (
+      selectedCards.length === 2 &&
+      !selectedCards.some((card) => card.isFlipped) &&
+      !disableClick &&
+      currentTurn === socket.id
+    ) {
       const [firstCard, secondCard] = selectedCards;
 
       if (firstCard.key === secondCard.key) {
         setMatchedPairs([...matchedPairs, firstCard.key]);
-        setPoints((prevPoints) => {
-          const updatedPoints = { ...prevPoints };
-          const currentPlayerId = currentTurn;
-          updatedPoints[currentPlayerId] = (updatedPoints[currentPlayerId] || 0) + 1;
-          return updatedPoints;
-        });
+
+        // Update points for the current player and emit to the server
+        const currentPlayerId = currentTurn;
+        const updatedPoints = {
+          ...points,
+          [currentPlayerId]: (points[currentPlayerId] || 0) + 1,
+        };
+        setPoints(updatedPoints);
+        socket.emit("update-points", roomId, updatedPoints);
 
         setTimeout(() => {
           rotateTurn();
@@ -171,6 +180,7 @@ function Game() {
       setSelectedCards([]);
     }
   };
+
 
 
   const rotateTurn = () => {
