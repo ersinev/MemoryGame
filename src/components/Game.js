@@ -86,6 +86,7 @@ function Game() {
   useEffect(() => {
     checkForMatch();
   }, [selectedCards]);
+ 
 
   useEffect(() => {
     if (gameStartTime) {
@@ -161,6 +162,8 @@ function Game() {
         };
         setPoints(updatedPoints);
         socket.emit("update-points", roomId, updatedPoints);
+        socket.emit("update-game-state", roomId,currentPlayerName, firstCard.id);
+        
 
         setTimeout(() => {
           rotateTurn();
