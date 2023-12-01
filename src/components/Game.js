@@ -51,18 +51,18 @@ function Game() {
       setGameId(gameId);
       setCardsState(cardsData);
       setGameStartTime(startTime);
-      console.log("this workedd")
+      
     });
 
     socket.on("turn-change", (newTurn) => {
       setCurrentTurn(newTurn);
-      console.log("this workede")
+      
     });
 
 
     socket.on("update-game-state", (updatedGameState) => {
       setGameState(updatedGameState);
-      console.log("this workedf");
+      console.log(updatedGameState)
     });
 
     socket.on("close-cards", (closedCardIds) => {
@@ -118,15 +118,16 @@ function Game() {
     );
   };
 
-  function closeCards(closedCardIds) {
+  const closeCards = (closedCardIds) => {
     setCardsState((prevState) => {
       const updatedState = prevState.map((card) =>
         closedCardIds.includes(card.id) ? { ...card, isFlipped: false } : card
       );
-
+  
       return updatedState;
     });
-  }
+  };
+  
 
   const handleClick = (clickedCard) => {
     if (
@@ -137,11 +138,18 @@ function Game() {
     ) {
       return;
     }
-
-    socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id);
-    setSelectedCards([...selectedCards, clickedCard]);
-
+  
+    // Use the callback function to get the latest state
+    setSelectedCards((prevSelectedCards) => {
+      const newSelectedCards = [...prevSelectedCards, clickedCard];
+  
+      // Emit the "flip-card" event with the newSelectedCards
+      socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id, newSelectedCards);
+  
+      return newSelectedCards;
+    });
   };
+
   const checkForMatch = () => {
     if (
       selectedCards.length === 2 &&
@@ -150,10 +158,10 @@ function Game() {
       currentTurn === socket.id
     ) {
       const [firstCard, secondCard] = selectedCards;
-
+  
       if (firstCard.key === secondCard.key) {
         setMatchedPairs([...matchedPairs, firstCard.key]);
-
+  
         // Update points for the current player and emit to the server
         const currentPlayerId = currentTurn;
         const updatedPoints = {
@@ -162,27 +170,25 @@ function Game() {
         };
         setPoints(updatedPoints);
         socket.emit("update-points", roomId, updatedPoints);
-        socket.emit("update-game-state", roomId,currentPlayerName, firstCard.id);
-        
-
-        setTimeout(() => {
-          rotateTurn();
-        }, 1000);
+        socket.emit("update-game-state", roomId, currentPlayerName, firstCard.id);
       } else {
         setDisableClick(true);
-
+  
         setTimeout(() => {
           const closingCardIds = selectedCards.map((card) => card.id);
           closeCards(closingCardIds);
-
+  
           setDisableClick(false);
           rotateTurn();
         }, 1000);
       }
-
+  
       setSelectedCards([]);
     }
   };
+  
+  
+  
 
 
 
