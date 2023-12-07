@@ -5,6 +5,7 @@ import Timer from "./Timer";
 import PlayerInput from "./PlayerInput";
 import Players from "./Players";
 import io from "socket.io-client";
+import Result from "./Result";
 
 function Game() {
   const [cardsState, setCardsState] = useState(cardsData);
@@ -13,6 +14,7 @@ function Game() {
   const [disableClick, setDisableClick] = useState(false);
   const [showEntryPage, setShowEntryPage] = useState(true);
   const [showContainer, setShowContainer] = useState(false);
+  const [showResultPage, setShowResultpage] = useState(false);
   const [players, setPlayers] = useState([]);
   const [currentTurn, setCurrentTurn] = useState(null);
   const [points, setPoints] = useState({});
@@ -95,7 +97,11 @@ function Game() {
           const currentTime = Date.now();
           const elapsedTime = currentTime - gameStartTime;
           const newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
-
+          console.log(newRemainingTime)
+          if(newRemainingTime = 0){
+            setShowContainer(false)
+            setShowResultpage(true)
+          }
           // If the new remaining time is the same, clear the interval
           if (newRemainingTime === prevRemainingTime) {
             clearInterval(timerInterval);
@@ -247,6 +253,13 @@ function Game() {
             </div>
           </div>
         )}
+
+        {showResultPage && (
+          <div style={{"color":"white"}}>
+            <Result/>
+          </div>
+        )}
+
       </div>
     </>
   );
