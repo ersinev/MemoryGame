@@ -171,6 +171,9 @@ function Game() {
         setPoints(updatedPoints);
         socket.emit("update-points", roomId, updatedPoints);
         socket.emit("update-game-state", roomId, currentPlayerName, firstCard.id);
+        setTimeout(() => {
+          rotateTurn(selectedCards);
+        }, 1000);
       } else {
         setDisableClick(true);
   
@@ -179,7 +182,7 @@ function Game() {
           closeCards(closingCardIds);
   
           setDisableClick(false);
-          rotateTurn();
+          rotateTurn(selectedCards);
         }, 1000);
       }
   
@@ -192,8 +195,8 @@ function Game() {
 
 
 
-  const rotateTurn = () => {
-    socket.emit("end-turn", roomId);
+  const rotateTurn = (selectedCards) => {
+    socket.emit("end-turn", roomId ,selectedCards);
   };
 
   const isCardMatched = (card) => {
