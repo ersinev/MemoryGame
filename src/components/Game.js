@@ -97,8 +97,8 @@ function Game() {
           const currentTime = Date.now();
           const elapsedTime = currentTime - gameStartTime;
           const newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
-          console.log(newRemainingTime)
-          if(newRemainingTime = 0){
+         
+          if(newRemainingTime == 0){
             setShowContainer(false)
             setShowResultpage(true)
           }
@@ -217,6 +217,7 @@ function Game() {
   };
 
 
+  console.log(points)
 
   return (
     <>
@@ -256,7 +257,7 @@ function Game() {
 
         {showResultPage && (
           <div style={{"color":"white"}}>
-            <Result/>
+            <Result players={players} points={points}/>
           </div>
         )}
 

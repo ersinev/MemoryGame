@@ -13,6 +13,7 @@ function Players({ players, currentTurn, onPlayerClick, points, setPoints }) {
     mdSize = 12;
   }
 
+  console.log(points)
   return (
     <Container fluid className="players">
       <Row>

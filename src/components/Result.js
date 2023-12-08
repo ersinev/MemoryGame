@@ -1,8 +1,18 @@
 import React from 'react'
 
-function Result() {
+function Result({players}) {
+
+  
+  
+  const {name } = players[0];
   return (
-    <div>Result</div>
+    <>
+    
+    <div>{name} </div>
+    
+    </>
+  
+  
   )
 }
 
