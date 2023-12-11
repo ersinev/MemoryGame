@@ -166,23 +166,37 @@ function Game() {
       const [firstCard, secondCard] = selectedCards;
   
       if (firstCard.key === secondCard.key) {
-        setMatchedPairs([...matchedPairs, firstCard.key]);
+        // Cards match logic
+        const newMatchedPair = firstCard.key;
   
-        // Update points for the current player and emit to the server
-        const currentPlayerId = currentTurn;
-        const updatedPoints = {
-          ...points,
-          [currentPlayerId]: (points[currentPlayerId] || 0) + 1,
-        };
-        setPoints(updatedPoints);
-        socket.emit("update-points", roomId, updatedPoints);
-        socket.emit("update-game-state", roomId, currentPlayerName, firstCard.id);
+        if (!matchedPairs.includes(newMatchedPair)) {
+          // Update the matchedPairs array with the new matched pair
+          setMatchedPairs([...matchedPairs, newMatchedPair]);
+  
+          // Update points for the current player and emit to the server
+          const currentPlayerId = currentTurn;
+          const updatedPoints = {
+            ...points,
+            [currentPlayerId]: (points[currentPlayerId] || 0) + 1,
+          };
+          setPoints(updatedPoints);
+          socket.emit("update-points", roomId, updatedPoints);
+          socket.emit("update-game-state", roomId, currentPlayerName, firstCard.id);
+        }
+  
+        // Keep the matched pairs open
+        updateCardState(firstCard.id, true);
+        updateCardState(secondCard.id, true);
+  
+        // Rotate turn after a delay
         setTimeout(() => {
           rotateTurn(selectedCards);
         }, 1000);
       } else {
+        // Cards do not match logic
         setDisableClick(true);
   
+        // Close the unmatched cards after a delay
         setTimeout(() => {
           const closingCardIds = selectedCards.map((card) => card.id);
           closeCards(closingCardIds);
@@ -195,6 +209,10 @@ function Game() {
       setSelectedCards([]);
     }
   };
+  
+  
+  
+  
   
   
   
