@@ -97,8 +97,9 @@ function Game() {
           const currentTime = Date.now();
           const elapsedTime = currentTime - gameStartTime;
           const newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
-         
-          if(newRemainingTime == 0){
+          console.log(newRemainingTime)
+          // testing miliseonds 1790000
+          if(newRemainingTime ===0 ){
             setShowContainer(false)
             setShowResultpage(true)
           }
