@@ -1,19 +1,18 @@
-import React from 'react'
+import React from "react";
 
-function Result({players}) {
-
-  
-  
-  const {name } = players[0];
+const Result = ({ players, points }) => {
   return (
-    <>
-    
-    <div>{name} </div>
-    
-    </>
-  
-  
-  )
-}
+    <div>
+      <h2>Game Over</h2>
+      <ul>
+        {players.map((player) => (
+          <li key={player.id}>
+            {player.name}: {points[player.id] || 0} points
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
-export default Result
+export default Result;

@@ -99,7 +99,7 @@ function Game() {
           const newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
           console.log(newRemainingTime)
           // testing miliseonds 1790000
-          if(newRemainingTime ===0 ){
+          if(newRemainingTime >111790000 ){
             setShowContainer(false)
             setShowResultpage(true)
           }
@@ -116,6 +116,19 @@ function Game() {
       return () => clearInterval(timerInterval);
     }
   }, [gameStartTime, remainingTime]);
+
+  useEffect(() => {
+    if (allCardsFlipped()) {
+      setShowContainer(false);
+      setShowResultpage(true);
+    }
+  }, [gameState.matchedPairs]);
+
+  
+
+  const allCardsFlipped = () => {
+    return cardsState.every((card) => card.isFlipped);
+  };
 
   const updateCardState = (cardId, isFlipped) => {
     setCardsState((prevState) =>
