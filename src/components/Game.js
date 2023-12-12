@@ -32,23 +32,23 @@ function Game() {
   
   useEffect(() => {
     //http://localhost:5000
-    
-    const socket = io("https://memorygame-we7d.onrender.com");
+    //https://memorygame-we7d.onrender.com
+    const socket = io("http://localhost:5000");
     setSocket(socket);
 
     if (roomId && currentPlayerName) {
       socket.emit("join-room", roomId, currentPlayerName);
-      console.log("this workeda")
+     
     }
 
     socket.on("player-joined", (playersInRoom) => {
       setPlayers(playersInRoom);
-      console.log("this workedb")
+      
     });
 
     socket.on("player-left", (playersInRoom) => {
       setPlayers(playersInRoom);
-      console.log("this workedc")
+      
     });
 
     socket.on("game-started", (gameId, cardsData, startTime) => {
@@ -66,7 +66,7 @@ function Game() {
 
     socket.on("update-game-state", (updatedGameState) => {
       setGameState(updatedGameState);
-      console.log(updatedGameState)
+      
     });
 
     socket.on("close-cards", (closedCardIds) => {
