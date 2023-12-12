@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 function AdminPanel() {
   const [roomData, setRoomData] = useState({});
   const [totalOnlineUsers, setTotalOnlineUsers] = useState(0);
-
+  console.log(totalOnlineUsers)
   useEffect(() => {
     const adminSocket = io("http://localhost:5000", {
       transports: ["websocket"],

@@ -21,6 +21,7 @@ function Timer({ remainingTime }) {
     return () => {
       clearInterval(intervalId);
     };
+    // eslint-disable-next-line
   }, [remainingTime]);
 
   const calculateRemainingTime = () => {
