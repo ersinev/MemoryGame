@@ -3,7 +3,7 @@ import { Col, Container, Form, Row, Button } from "react-bootstrap";
 
 function PlayerInput({ onJoinGame }) {
   const [name, setName] = useState("");
-  const [school, setSchool] = useState("");
+  
   const [roomId, setRoomId] = useState("");
 
   const handleStartGame = () => {

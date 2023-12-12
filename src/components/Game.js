@@ -18,18 +18,18 @@ function Game() {
   const [players, setPlayers] = useState([]);
   const [currentTurn, setCurrentTurn] = useState(null);
   const [points, setPoints] = useState({});
-  const [closingCards, setClosingCards] = useState(false);
+  //const [closingCards, setClosingCards] = useState(false);
   const [socket, setSocket] = useState(null);
   const [roomId, setRoomId] = useState("");
   const [currentPlayerName, setCurrentPlayerName] = useState("");
-  const [gameId, setGameId] = useState(null);
+  //const [gameId, setGameId] = useState(null);
   const [gameStartTime, setGameStartTime] = useState(null);
   const [remainingTime, setRemainingTime] = useState(30 * 60 * 1000); // 30 minutes in milliseconds
   const [gameState, setGameState] = useState({
     turnedCards: [],
     matchedPairs: [],
   });
-
+  
   useEffect(() => {
     const socket = io("http://localhost:5000");
     setSocket(socket);
@@ -50,7 +50,7 @@ function Game() {
     });
 
     socket.on("game-started", (gameId, cardsData, startTime) => {
-      setGameId(gameId);
+      // setGameId(gameId);
       setCardsState(cardsData);
       setGameStartTime(startTime);
       
@@ -224,15 +224,6 @@ function Game() {
     }
   };
   
-  
-  
-  
-  
-  
-  
-
-
-
   const rotateTurn = (selectedCards) => {
     socket.emit("end-turn", roomId ,selectedCards);
   };
@@ -248,8 +239,6 @@ function Game() {
     setRoomId(enteredRoomId);
   };
 
-
-  console.log(points)
 
   return (
     <>
@@ -280,7 +269,7 @@ function Game() {
                   isTurned={gameState.turnedCards.some(
                     (turn) => turn.cardId === card.id
                   )}
-                  disableClick={disableClick || closingCards}
+                  disableClick={disableClick}
                 />
               ))}
             </div>
