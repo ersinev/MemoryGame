@@ -87,6 +87,7 @@ function Game() {
 
   useEffect(() => {
     checkForMatch();
+    // eslint-disable-next-line
   }, [selectedCards]);
  
 
@@ -99,7 +100,7 @@ function Game() {
           const newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
           console.log(newRemainingTime)
           // testing miliseonds 1790000
-          if(newRemainingTime >111790000 ){
+          if(newRemainingTime =0 ){ 
             setShowContainer(false)
             setShowResultpage(true)
           }
@@ -122,6 +123,7 @@ function Game() {
       setShowContainer(false);
       setShowResultpage(true);
     }
+    // eslint-disable-next-line
   }, [gameState.matchedPairs]);
 
   
@@ -283,7 +285,7 @@ function Game() {
         )}
 
       </div>
-    </>
+    </> 
   );
 }
 
