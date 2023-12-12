@@ -32,15 +32,7 @@ function PlayerInput({ onJoinGame }) {
                   onChange={(e) => setName(e.target.value)}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formGroupSchool">
-                <Form.Label>School</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter your school name"
-                  value={school}
-                  onChange={(e) => setSchool(e.target.value)}
-                />
-              </Form.Group>
+             
               <Form.Group className="mb-3" controlId="formGroupRoomId">
                 <Form.Label>Room Id</Form.Label>
                 <Form.Control
