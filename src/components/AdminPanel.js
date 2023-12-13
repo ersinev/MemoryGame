@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 function AdminPanel() {
   const [roomData, setRoomData] = useState({});
   const [totalOnlineUsers, setTotalOnlineUsers] = useState(0);
-  console.log(totalOnlineUsers)
+
   useEffect(() => {
     const adminSocket = io("http://localhost:5000", {
       transports: ["websocket"],
@@ -12,38 +12,24 @@ function AdminPanel() {
     });
 
     adminSocket.on("online-users", (data) => {
-      setTotalOnlineUsers((prevCount) => {
-        let updatedCount = prevCount;
-
-        if (data.added && data.added !== "admin") {
-          updatedCount += 1;
-        }
-
-        if (data.removed && data.removed !== "admin") {
-          updatedCount -= 1;
-        }
-
-        return updatedCount;
-      });
+      setTotalOnlineUsers(data.total);
     });
 
-  setInterval(()=>{
     adminSocket.on("room-data", (data) => {
-      setRoomData(data);
+      setRoomData((prevData) => ({ ...prevData, ...data }));
     });
-  },1000)
 
     adminSocket.emit("join-room", "admin");
 
-    // return () => {
-    //   adminSocket.disconnect();
-    // };
-  }, []);
+    return () => {
+      adminSocket.disconnect();
+    };
+  }, []); 
 
   return (
     <div style={{ color: "black", backgroundColor: "whitesmoke" }}>
       <h2>Admin Panel</h2>
-      {console.log(roomData)}
+      <p>Total Online Users: {totalOnlineUsers}</p>
       {Object.keys(roomData).map((roomId) => (
         <div key={roomId}>
           <p>
