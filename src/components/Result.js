@@ -15,7 +15,7 @@ function Result({ players, points }) {
           </h1>
         )}
       </div>
-
+          <hr/>
       <div style={{ textAlign: 'center' }}>
         
         <Table striped bordered hover style={{ width: '50%', margin: 'auto',backgroundColor: 'red' }}>
