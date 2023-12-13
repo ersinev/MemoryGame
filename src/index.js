@@ -9,11 +9,11 @@ import Result from "./components/Result";
 
 const root = createRoot(document.getElementById("root"));
 root.render(
-  <Router>
+<Router>
     <Routes>
       <Route exact path="/" element={<Game />} />
       <Route exact path="/admin" element={<AdminPanel />} />
-      <Route exact path="/result" element={<Result/>} />
+      <Route exact path="/result" element={<Result />} />
     </Routes>
   </Router>
 );
