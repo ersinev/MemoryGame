@@ -6,7 +6,7 @@ function Result({ players, points }) {
   return (
     <div>
       <div style={{ textAlign: 'center', marginBottom: '100px' }}>
-        <h2 style={{fontFamily:"Bungee Inline, Arial, sans-serif", color:"green", fontSize:"100px"}}>
+        <h2 style={{marginBottom: '50px',fontFamily:"Bungee Inline, Arial, sans-serif", color:"green", fontSize:"100px"}}>
           <span role="img" aria-label="crown">&#128081;</span> Winner <span role="img" aria-label="crown">&#128081;</span>
         </h2>
         {winner && (
