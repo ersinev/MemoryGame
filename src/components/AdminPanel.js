@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Col, Row } from "react-bootstrap";
 import { io } from "socket.io-client";
 
 function AdminPanel() {
@@ -12,7 +13,7 @@ function AdminPanel() {
     });
 
     adminSocket.on("online-users", (data) => {
-      setTotalOnlineUsers(data.total);
+      setTotalOnlineUsers(data.length);
     });
 
     adminSocket.on("room-data", (data) => {
@@ -27,14 +28,18 @@ function AdminPanel() {
   }, []); 
 
   return (
-    <div style={{ color: "black", backgroundColor: "whitesmoke" }}>
+    <div className="container" style={{ minWidth:"100%", minHeight:"100vh", display:"flex",color: "black", backgroundColor: "white",float:"left", alignItems:"center",textAlign:"center" }}>
+      <div>
       <h2>Admin Panel</h2>
-      <p>Total Online Users: {totalOnlineUsers}</p>
-      {Object.keys(roomData).map((roomId) => (
+      <hr/>
+      <h4>Total Online Users: {totalOnlineUsers}</h4>
+      <Row>
+        <Col>
+        {Object.keys(roomData).map((roomId) => (
         <div key={roomId}>
-          <p>
+          <h5 style={{fontWeight:"bolder"}}>
             Room ID: {roomId}, Total Users: {roomData[roomId].players.length}
-          </p>
+          </h5>
           <ul>
             {roomData[roomId].players.map((player) => (
               <li key={player.id}>
@@ -44,6 +49,10 @@ function AdminPanel() {
           </ul>
         </div>
       ))}
+        </Col>
+      </Row>
+     
+      </div>
     </div>
   );
 }
