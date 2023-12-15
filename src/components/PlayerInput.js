@@ -20,7 +20,7 @@ function PlayerInput({ onJoinGame }) {
   return (
     <>
       <Container fluid>
-        <Row className="justify-content-center">
+        <Row className="justify-content-center" style={{fontFamily:"Black Ops One,Ariel"}}>
           <Col md={4}>
             <Form>
               <Form.Group className="mb-3" controlId="formGroupName">
@@ -43,7 +43,7 @@ function PlayerInput({ onJoinGame }) {
                 />
               </Form.Group>
             </Form>
-            <Button onClick={handleStartGame}>Start Game</Button>
+            <Button onClick={handleStartGame}>Start  Game</Button>
           </Col>
         </Row>
       </Container>

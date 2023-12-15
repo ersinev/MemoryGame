@@ -29,7 +29,7 @@ function AdminPanel() {
 
   return (
     <div className="container" style={{ minWidth: "100%", minHeight: "100vh", display: "flex", color: "white", backgroundColor: "#131540", float: "left", alignItems: "center", textAlign: "center" }}>
-      <h2 style={{ color: "white", marginBottom: "20px", fontSize:"50px" }}>Admin Panel</h2>
+      <h2 style={{ color: "white", marginBottom: "20px", fontSize:"50px", fontFamily:"Rubik Bubbles, Ariel" }}>Admin Panel</h2>
       
       <h4 style={{ color: "white", marginBottom: "30px" }}>Total Online Users: {totalOnlineUsers}</h4>
 
