@@ -11,21 +11,21 @@ function AdminPanel() {
       transports: ["websocket"],
       query: "room=admin",
     });
-
+  
     adminSocket.on("online-users", (data) => {
       setTotalOnlineUsers(data.length);
     });
-
+  
     adminSocket.on("room-data", (data) => {
-      setRoomData((prevData) => ({ ...prevData, ...data }));
+      setRoomData(data);
     });
-
+  
     adminSocket.emit("join-room", "admin");
-
+  
     return () => {
       adminSocket.disconnect();
     };
-  }, []); 
+  }, []);
 
   return (
     <div className="container" style={{ minWidth:"100%", minHeight:"100vh", display:"flex",color: "black", backgroundColor: "white",float:"left", alignItems:"center",textAlign:"center" }}>
