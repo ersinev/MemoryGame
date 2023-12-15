@@ -18,11 +18,9 @@ function Game() {
   const [players, setPlayers] = useState([]);
   const [currentTurn, setCurrentTurn] = useState(null);
   const [points, setPoints] = useState({});
-  //const [closingCards, setClosingCards] = useState(false);
   const [socket, setSocket] = useState(null);
   const [roomId, setRoomId] = useState("");
   const [currentPlayerName, setCurrentPlayerName] = useState("");
-  //const [gameId, setGameId] = useState(null);
   const [gameStartTime, setGameStartTime] = useState(null);
   const [remainingTime, setRemainingTime] = useState(30 * 60 * 1000); // 30 minutes in milliseconds
   const [gameState, setGameState] = useState({
