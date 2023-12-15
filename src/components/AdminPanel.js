@@ -11,48 +11,54 @@ function AdminPanel() {
       transports: ["websocket"],
       query: "room=admin",
     });
-  
+
     adminSocket.on("online-users", (data) => {
       setTotalOnlineUsers(data.length);
     });
-  
+
     adminSocket.on("room-data", (data) => {
       setRoomData(data);
     });
-  
+
     adminSocket.emit("join-room", "admin");
-  
+
     return () => {
       adminSocket.disconnect();
     };
   }, []);
 
   return (
-    <div className="container" style={{ minWidth:"100%", minHeight:"100vh", display:"flex",color: "black", backgroundColor: "white",float:"left", alignItems:"center",textAlign:"center" }}>
-      <div>
-      <h2>Admin Panel</h2>
-      <hr/>
-      <h4>Total Online Users: {totalOnlineUsers}</h4>
-      <Row>
-        <Col>
-        {Object.keys(roomData).map((roomId) => (
-        <div key={roomId}>
-          <h5 style={{fontWeight:"bolder"}}>
-            Room ID: {roomId}, Total Users: {roomData[roomId].players.length}
-          </h5>
-          <ul>
-            {roomData[roomId].players.map((player) => (
-              <li key={player.id}>
-                {player.name} (ID: {player.id})
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-        </Col>
+    <div className="container" style={{ minWidth: "100%", minHeight: "100vh", display: "flex", color: "white", backgroundColor: "#131540", float: "left", alignItems: "center", textAlign: "center" }}>
+      <h2 style={{ color: "white", marginBottom: "20px", fontSize:"50px" }}>Admin Panel</h2>
+      
+      <h4 style={{ color: "white", marginBottom: "30px" }}>Total Online Users: {totalOnlineUsers}</h4>
+
+      <Row xs={1} md={2} lg={3} xl={4} className="g-4">
+        {Object.keys(roomData).map((roomId) => {
+          if (roomId !== "admin") {
+            return (
+              <Col key={roomId} className="mb-3">
+                <div style={{ backgroundColor: "#22b8cf", padding: "20px", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)" }}>
+                  <h5 style={{ fontWeight: "bolder", marginBottom: "15px" }}>
+                    Room: {roomId}
+                  </h5>
+                  <h5 style={{ marginBottom: "10px" }}>
+                    Users: {roomData[roomId].players.length}
+                  </h5>
+                  <ul style={{ listStyle: "none", padding: 0 }}>
+                    {roomData[roomId].players.map((player) => (
+                      <li key={player.id} style={{ marginBottom: "5px" }}>
+                        {player.name} 
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Col>
+            );
+          }
+          return null;
+        })}
       </Row>
-     
-      </div>
     </div>
   );
 }
