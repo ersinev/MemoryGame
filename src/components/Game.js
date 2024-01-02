@@ -99,7 +99,7 @@ function Game() {
           const elapsedTime = currentTime - gameStartTime;
           let newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
           
-          // testing miliseonds 1790000
+          // testing miliseconds 1790000
           if(newRemainingTime === 0  ){    
             setShowContainer(false)
             setShowResultpage(true)
