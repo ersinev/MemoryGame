@@ -18,7 +18,7 @@ function Result({ players, points }) {
           <div>
             {winners.map(winner => (
               <h1 key={winner.id} style={{ fontSize: "50px" }}>
-                {winner.name}: {points[winner.id] || 0} points
+                {winner.name}: {points[winner.id] || 0} punten
               </h1>
             ))}
           </div>
@@ -30,8 +30,8 @@ function Result({ players, points }) {
           <thead>
             <tr>
               <th>#</th>
-              <th>Name</th>
-              <th>Points</th>
+              <th>Naam</th>
+              <th>Punten</th>
             </tr>
           </thead>
           <tbody>

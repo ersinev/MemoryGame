@@ -24,20 +24,20 @@ function PlayerInput({ onJoinGame }) {
           <Col md={4}>
             <Form>
               <Form.Group className="mb-3" controlId="formGroupName">
-                <Form.Label>Name</Form.Label>
+                <Form.Label>Naam</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter your name"
+                  placeholder="Vul je naam in"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
               </Form.Group>
              
               <Form.Group className="mb-3" controlId="formGroupRoomId">
-                <Form.Label>Room Id</Form.Label>
+                <Form.Label>Room ID</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Enter room ID"
+                  placeholder="Room ID"
                   value={roomId}
                   onChange={(e) => setRoomId(e.target.value)}
                 />
