@@ -9,8 +9,8 @@ function Result({ players, points }) {
   const winners = players.filter(player => (points[player.id] || 0) === highestPoints);
 
   return (
-    <div>
-      <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+    <div className='container-fluid'>
+      <div style={{ textAlign: 'center', marginBottom: '100px'}}>
         <h2 style={{ marginBottom: '50px', fontFamily: "Bungee Inline, Arial, sans-serif", color: "green", fontSize: "100px" }}>
         <span role="img" aria-label="crown">&#128081;</span> {winners.length === 1 ? 'Winner' : 'Winners'} <span role="img" aria-label="crown">&#128081;</span>
         </h2>
