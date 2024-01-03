@@ -11,8 +11,8 @@ function Result({ players, points }) {
   return (
     <div className='container-fluid'>
       <div style={{ textAlign: 'center', marginBottom: '100px'}}>
-        <h2 style={{ marginBottom: '50px', fontFamily: "Bungee Inline, Arial, sans-serif", color: "green", fontSize: "100px" }}>
-        <span role="img" aria-label="crown">&#128081;</span> {winners.length === 1 ? 'Winner' : 'Winners'} <span role="img" aria-label="crown">&#128081;</span>
+        <h2 style={{ marginBottom: '50px',alignItems:"center", fontFamily: "Bungee Inline, Arial, sans-serif", color: "green", fontSize: "100px" }}>
+        <span role="img"  aria-label="crown">&#128081;</span> {winners.length === 1 ? 'Winner' : 'Winners'} <span role="img" aria-label="crown">&#128081;</span>
         </h2>
         {winners.length > 0 && (
           <div>
@@ -26,7 +26,7 @@ function Result({ players, points }) {
       </div>
       <hr />
       <div style={{ textAlign: 'center' }}>
-        <Table striped bordered hover style={{ width: '50%', margin: 'auto'}}>
+        <Table striped bordered hover style={{ width: '60%', margin: 'auto'}}>
           <thead>
             <tr>
               <th>#</th>
