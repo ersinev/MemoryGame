@@ -64,18 +64,24 @@
 .memory-card:active {
   
   transition: transform 0.2s;
+  
 }
 
 .memory-card.flip {
   transform: rotateY(180deg);
+  
 }
-
+.matched{
+  border: 5px rgb(24, 181, 3) solid;
+  border-radius: 5px;
+}
 .front-face {
   width: 100%;
   height: 100%;
 
   position: absolute;
   border-radius: 5px;
+  
   background: #30336b;
   backface-visibility: hidden;
   object-fit: fill;

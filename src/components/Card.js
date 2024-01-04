@@ -1,8 +1,8 @@
 
-function Card({ card, onClick, image }) {
+function Card({ card, onClick, image, isMatched }) {
   return (
     <div
-      className={`memory-card${card.isFlipped ? " flip" : ""}`}
+    className={`memory-card${card.isFlipped ? " flip" : ""}${isMatched ? " matched" : ""}`}
       onClick={onClick}
       style={{ order: card.order }}
       data-testid={card.id}
