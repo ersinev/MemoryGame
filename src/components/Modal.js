@@ -35,10 +35,11 @@ export default function BasicModal(props) {
 
   const handleOpen = () => closeModal();
 
-  const matchedPairs = cardsState.filter((element) => element.key === lastMatchedPairs);
-  
-  const lastMatched = matchedPairs.sort((a, b) => a.id - b.id);
-  console.log(lastMatched)
+  const matchedPairs = cardsState.filter((element) => element.key === lastMatchedPairs).sort((a, b) => a.id - b.id);
+
+
+
+  console.log(matchedPairs)
   return (
     <div>
       <Modal
@@ -53,7 +54,7 @@ export default function BasicModal(props) {
               <img
                 src={require(`../assets/images/${matchedPairs[0].img}`)}
                 style={{ width: '500px', height: '500px' }}
-                alt={`Card ${lastMatched[0].id}`}
+                alt={`Card ${matchedPairs[0].id}`}
               />
             </div>
           )}

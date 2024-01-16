@@ -104,7 +104,7 @@ function Game() {
           let newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
           
           // testing miliseconds 1790000
-          if(newRemainingTime > 17590000  ){    
+          if(newRemainingTime === 0  ){    
             setShowContainer(false)
             setShowResultpage(true)
           }
@@ -132,12 +132,29 @@ function Game() {
 
  
   useEffect(() => {
-    setlastMatchedPairs(matchedPairs[matchedPairs.length - 1])
+    setlastMatchedPairs(matchedPairs[matchedPairs.length-1]);
     if (matchedPairs.length > 0) {
       setModalOpen(true);
     }
   }, [matchedPairs]);
   
+  useEffect(() => {
+    // Check if socket is available before setting up the event listener
+    if (socket) {
+      // Listen for the "matched-pairs" event and update the state
+      socket.on("matched-pairs", (matchedPairsFromServer) => {
+        // Update the matchedPairs state with the data from the server
+        setMatchedPairs(matchedPairsFromServer);
+        // Open the modal when there are matched pairs
+        setModalOpen(true);
+      });
+  
+      // Clean up the event listener when the component unmounts
+      return () => {
+        socket.off("matched-pairs");
+      };
+    }
+  }, [socket]);
 
   const allCardsFlipped = () => {
     return cardsState.every((card) => card.isFlipped);
