@@ -6,6 +6,7 @@ import PlayerInput from "./PlayerInput";
 import Players from "./Players";
 import io from "socket.io-client";
 import Result from "./Result";
+import Modal from "./Modal";
 
 function Game() {
   const [cardsState, setCardsState] = useState(cardsData);
@@ -27,11 +28,14 @@ function Game() {
     turnedCards: [],
     matchedPairs: [],
   });
+
+  const [lastMatchedPairs, setlastMatchedPairs] = useState([])
+  const [ModalOpen, setModalOpen] = useState(false)
   
   useEffect(() => {
     //http://localhost:5000
     //https://memorygame-we7d.onrender.com
-    const socket = io("https://memorygame-we7d.onrender.com");
+    const socket = io("http://localhost:5000");
     setSocket(socket);
 
     if (roomId && currentPlayerName) {
@@ -100,7 +104,7 @@ function Game() {
           let newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
           
           // testing miliseconds 1790000
-          if(newRemainingTime === 0  ){    
+          if(newRemainingTime > 17590000  ){    
             setShowContainer(false)
             setShowResultpage(true)
           }
@@ -126,6 +130,13 @@ function Game() {
     // eslint-disable-next-line
   }, [gameState.matchedPairs]);
 
+ 
+  useEffect(() => {
+    setlastMatchedPairs(matchedPairs[matchedPairs.length - 1])
+    if (matchedPairs.length > 0) {
+      setModalOpen(true);
+    }
+  }, [matchedPairs]);
   
 
   const allCardsFlipped = () => {
@@ -277,12 +288,15 @@ function Game() {
             </div>
           </div>
         )}
+        
 
         {showResultPage && (
           <div style={{"color":"white"}}>
             <Result players={players} points={points}/>
           </div>
         )}
+
+        <Modal modalOpen={ModalOpen} closeModal={() => setModalOpen(false)} lastMatchedPairs={lastMatchedPairs} cardsState={cardsState} />
 
       </div>
     </> 
