@@ -31,7 +31,10 @@ function Game() {
 
   const [lastMatchedPairs, setlastMatchedPairs] = useState([])
   const [ModalOpen, setModalOpen] = useState(false)
-  
+
+
+
+
   useEffect(() => {
     //http://localhost:5000
     //https://memorygame-we7d.onrender.com
@@ -40,35 +43,36 @@ function Game() {
 
     if (roomId && currentPlayerName) {
       socket.emit("join-room", roomId, currentPlayerName);
-     
+
     }
 
     socket.on("player-joined", (playersInRoom) => {
       setPlayers(playersInRoom);
-      
+
     });
 
     socket.on("player-left", (playersInRoom) => {
       setPlayers(playersInRoom);
-      
+      console.log("this is triggered aswell")
+
     });
 
     socket.on("game-started", (gameId, cardsData, startTime) => {
       // setGameId(gameId);
       setCardsState(cardsData);
       setGameStartTime(startTime);
-      
+
     });
 
     socket.on("turn-change", (newTurn) => {
       setCurrentTurn(newTurn);
-      
+
     });
 
 
     socket.on("update-game-state", (updatedGameState) => {
       setGameState(updatedGameState);
-      
+
     });
 
     socket.on("close-cards", (closedCardIds) => {
@@ -80,7 +84,7 @@ function Game() {
       updateCardState(cardId, true);
     });
 
-    socket.on("update-points",(updatedPoints)=>{
+    socket.on("update-points", (updatedPoints) => {
       setPoints(updatedPoints);
     })
 
@@ -93,7 +97,7 @@ function Game() {
     checkForMatch();
     // eslint-disable-next-line
   }, [selectedCards]);
- 
+
 
   useEffect(() => {
     if (gameStartTime) {
@@ -102,9 +106,9 @@ function Game() {
           const currentTime = Date.now();
           const elapsedTime = currentTime - gameStartTime;
           let newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
-          
+
           // testing miliseconds 1790000
-          if(newRemainingTime === 0  ){    
+          if (newRemainingTime === 0) {
             setShowContainer(false)
             setShowResultpage(true)
           }
@@ -130,14 +134,14 @@ function Game() {
     // eslint-disable-next-line
   }, [gameState.matchedPairs]);
 
- 
+
   useEffect(() => {
-    setlastMatchedPairs(matchedPairs[matchedPairs.length-1]);
+    setlastMatchedPairs(matchedPairs[matchedPairs.length - 1]);
     if (matchedPairs.length > 0) {
       setModalOpen(true);
     }
   }, [matchedPairs]);
-  
+
   useEffect(() => {
     // Check if socket is available before setting up the event listener
     if (socket) {
@@ -148,7 +152,7 @@ function Game() {
         // Open the modal when there are matched pairs
         setModalOpen(true);
       });
-  
+
       // Clean up the event listener when the component unmounts
       return () => {
         socket.off("matched-pairs");
@@ -173,11 +177,11 @@ function Game() {
       const updatedState = prevState.map((card) =>
         closedCardIds.includes(card.id) ? { ...card, isFlipped: false } : card
       );
-  
+
       return updatedState;
     });
   };
-  
+
 
   const handleClick = (clickedCard) => {
     if (
@@ -188,14 +192,14 @@ function Game() {
     ) {
       return;
     }
-  
+
     // Use the callback function to get the latest state
     setSelectedCards((prevSelectedCards) => {
       const newSelectedCards = [...prevSelectedCards, clickedCard];
-  
+
       // Emit the "flip-card" event with the newSelectedCards
       socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id, newSelectedCards);
-  
+
       return newSelectedCards;
     });
   };
@@ -208,15 +212,15 @@ function Game() {
       currentTurn === socket.id
     ) {
       const [firstCard, secondCard] = selectedCards;
-  
+
       if (firstCard.key === secondCard.key) {
         // Cards match logic
         const newMatchedPair = firstCard.key;
-  
+
         if (!matchedPairs.includes(newMatchedPair)) {
           // Update the matchedPairs array with the new matched pair
           setMatchedPairs([...matchedPairs, newMatchedPair]);
-  
+
           // Update points for the current player and emit to the server
           const currentPlayerId = currentTurn;
           const updatedPoints = {
@@ -227,11 +231,11 @@ function Game() {
           socket.emit("update-points", roomId, updatedPoints);
           socket.emit("update-game-state", roomId, currentPlayerName, firstCard.id);
         }
-  
+
         // Keep the matched pairs open
         updateCardState(firstCard.id, true);
         updateCardState(secondCard.id, true);
-  
+
         // Rotate turn after a delay
         setTimeout(() => {
           rotateTurn(selectedCards);
@@ -239,23 +243,23 @@ function Game() {
       } else {
         // Cards do not match logic
         setDisableClick(true);
-  
+
         // Close the unmatched cards after a delay
         setTimeout(() => {
           const closingCardIds = selectedCards.map((card) => card.id);
           closeCards(closingCardIds);
-  
+
           setDisableClick(false);
           rotateTurn(selectedCards);
         }, 1000);
       }
-  
+
       setSelectedCards([]);
     }
   };
-  
+
   const rotateTurn = (selectedCards) => {
-    socket.emit("end-turn", roomId ,selectedCards);
+    socket.emit("end-turn", roomId, selectedCards);
   };
 
   const isCardMatched = (card) => {
@@ -305,18 +309,18 @@ function Game() {
             </div>
           </div>
         )}
-        
+
 
         {showResultPage && (
-          <div style={{"color":"white"}}>
-            <Result players={players} points={points}/>
+          <div style={{ "color": "white" }}>
+            <Result players={players} points={points} />
           </div>
         )}
 
         <Modal modalOpen={ModalOpen} closeModal={() => setModalOpen(false)} lastMatchedPairs={lastMatchedPairs} cardsState={cardsState} />
 
       </div>
-    </> 
+    </>
   );
 }
 

@@ -39,7 +39,7 @@ export default function BasicModal(props) {
 
 
 
-  console.log(matchedPairs)
+  
   return (
     <div>
       <Modal
