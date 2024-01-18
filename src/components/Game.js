@@ -38,7 +38,7 @@ function Game() {
   useEffect(() => {
     //http://localhost:5000
     //https://memorygame-we7d.onrender.com
-    const socket = io("http://localhost:5000");
+    const socket = io("/https://memorygame-we7d.onrender.com");
     setSocket(socket);
 
     if (roomId && currentPlayerName) {
@@ -55,7 +55,7 @@ function Game() {
     socket.on("player-left", (playersInRoom) => {
       setPlayers(playersInRoom);
       console.log("this is triggered aswell")
-
+ 
     });
 
     socket.on("game-started", (gameId, cardsData, startTime) => {
