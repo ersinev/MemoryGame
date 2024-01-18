@@ -38,7 +38,7 @@ function Game() {
   useEffect(() => {
     //http://localhost:5000
     //https://memorygame-we7d.onrender.com
-    const socket = io("/https://memorygame-we7d.onrender.com");
+    const socket = io("https://memorygame-we7d.onrender.com");
     setSocket(socket);
 
     if (roomId && currentPlayerName) {
