@@ -88,6 +88,7 @@ function Game() {
       setPoints(updatedPoints);
     })
 
+
     return () => {
       socket.disconnect();
     };
