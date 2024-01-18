@@ -48,6 +48,7 @@ function Game() {
 
     socket.on("player-joined", (playersInRoom) => {
       setPlayers(playersInRoom);
+      console.log(playersInRoom)
 
     });
 
@@ -72,7 +73,7 @@ function Game() {
 
     socket.on("update-game-state", (updatedGameState) => {
       setGameState(updatedGameState);
-
+      
     });
 
     socket.on("close-cards", (closedCardIds) => {

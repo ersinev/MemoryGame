@@ -2,8 +2,10 @@ import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 
 function Players({ players, currentTurn, points }) {
-
-
+  // Check if players is an array before mapping over it
+  if (!Array.isArray(players)) {
+    return null; // or handle the case appropriately
+  }
 
   return (
     <Container fluid className="players">
@@ -24,5 +26,6 @@ function Players({ players, currentTurn, points }) {
     </Container>
   );
 }
+
 
 export default Players;
