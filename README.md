@@ -1,6 +1,6 @@
 # Memory Game Multiplayer
 
-**Project Link:** <a href="https://itgaragememorygame.netlify.app" target="_blank">Memory Game Multiplayer</a>
+**Project Link:** [Memory Game Multiplayer](https://itgaragememorygame.netlify.app)
 
 ## Overview
 
