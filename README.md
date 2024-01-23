@@ -40,3 +40,7 @@ The points are updated in real-time and displayed on the screen.
 ### Game End:
 The game ends when either all card pairs are matched or the timer reaches zero.
 A result page is displayed, showing each player's points.
+
+![Screenshot 2024-01-23 131624](https://github.com/ersinev/MemoryGame/assets/66500873/cc8d109f-bec6-4f15-adfb-53b93edb0572)
+
+
