@@ -25,7 +25,7 @@
 .players{
   color: white;
   text-align: center;
-  /* margin-bottom: 5px; */
+  
 }
 .container{
   display: flex;
@@ -72,10 +72,7 @@
   transform: rotateY(180deg);
   
 }
-/* .matched{
-  border: 5px rgb(24, 181, 3) solid;
-  border-radius: 5px;
-} */
+
 
 .front-face {
   width: 100%;
