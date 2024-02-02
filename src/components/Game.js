@@ -23,7 +23,7 @@ function Game() {
   const [roomId, setRoomId] = useState("");
   const [currentPlayerName, setCurrentPlayerName] = useState("");
   const [gameStartTime, setGameStartTime] = useState(null);
-  const [remainingTime, setRemainingTime] = useState(30 * 60 * 1000); // 30 minutes in milliseconds
+  const [remainingTime, setRemainingTime] = useState(30 * 60 * 1000); // 30 minutes 
   const [gameState, setGameState] = useState({
     turnedCards: [],
     matchedPairs: [],
