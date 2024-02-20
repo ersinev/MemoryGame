@@ -20,7 +20,7 @@ function PlayerInput({ onJoinGame }) {
   return (
     <>
       <Container fluid>
-        <h1 style="fontFamily: 'Honk', 'system-ui'">Memory Game</h1>
+        <h1 style={{ fontFamily: "Honk, Arial, sans-serif" }} className="memoryHeader">Memory Game</h1>
         <Row className="justify-content-center" style={{ fontFamily: "Black Ops One,Ariel" }}>
           <Col md={4}>
             <Form>
@@ -45,7 +45,7 @@ function PlayerInput({ onJoinGame }) {
               </Form.Group>
             </Form>
             <div className="d-grid mt-3">
-              <Button variant = "outline-warning" onClick={handleStartGame}>Start Game</Button>{' '}
+              <Button variant="outline-warning" onClick={handleStartGame}>Start Game</Button>{' '}
             </div>
 
           </Col>
