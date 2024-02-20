@@ -20,7 +20,7 @@ function PlayerInput({ onJoinGame }) {
   return (
     <>
       <Container fluid>
-        <h1 style={{ fontFamily: "Honk, Arial, sans-serif" }} className="memoryHeader">Memory Game</h1>
+      <h1 style={{ fontFamily: "Honk, Arial, sans-serif" }} className="memoryHeader">Memory Game</h1>
         <Row className="justify-content-center" style={{ fontFamily: "Black Ops One,Ariel" }}>
           <Col md={4}>
             <Form>

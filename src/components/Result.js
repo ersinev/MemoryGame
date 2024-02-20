@@ -1,5 +1,7 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
+
 
 function Result({ players, points }) {
   // Find the highest points
@@ -7,6 +9,8 @@ function Result({ players, points }) {
 
   // Find all players with the highest points
   const winners = players.filter(player => (points[player.id] || 0) === highestPoints);
+
+ 
 
   return (
     <div className='container-fluid'>
@@ -50,6 +54,9 @@ function Result({ players, points }) {
               ))}
           </tbody>
         </Table>
+
+        <Button style={{marginTop:"20px"}} variant="outline-warning" onClick={() => window.location.reload()}>Speel Nog Een Keer</Button>
+
       </div>
     </div>
   );
