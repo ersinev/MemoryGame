@@ -38,7 +38,7 @@ function Game() {
   useEffect(() => {
     //http://localhost:5000
     //https://memorygame-we7d.onrender.com
-    const socket = io("https://memorygame-we7d.onrender.com");
+    const socket = io("http://localhost:5000");
     setSocket(socket);
 
     if (roomId && currentPlayerName) {
@@ -108,7 +108,7 @@ function Game() {
           const currentTime = Date.now();
           const elapsedTime = currentTime - gameStartTime;
           let newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
-
+          
           // testing miliseconds 1790000
           if (newRemainingTime === 0) {
             setShowContainer(false)
@@ -281,6 +281,7 @@ function Game() {
       <div className="container-fluid main">
         {showEntryPage && (
           <div className="entryPage" style={{ color: "white" }}>
+            
             <PlayerInput onJoinGame={handleStartGame} setTheRoom={setRoomId} />
           </div>
         )}

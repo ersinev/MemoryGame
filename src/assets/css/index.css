@@ -5,6 +5,7 @@
 }
 .body{
   overflow: hidden;
+  
 }
 
 #root {
@@ -95,4 +96,55 @@
   background: #30336b;
   backface-visibility: hidden;
   object-fit: contain;
+}
+
+/*-------------------- HEADERS ----------------------------------*/
+
+.memoryHeader {
+  font-family: 'Honk', system-ui;
+  font-weight: 500;
+  font-size: 100px;
+}
+
+.resultHeader {
+  font-size: 100px; 
+}
+@media (max-width: 460px) {
+ 
+  .resultHeader {
+    font-size: 75px; 
+  }
+}
+
+@media (max-width: 360px) {
+  .memoryHeader {
+    font-size: 80px; 
+  }
+  .resultHeader {
+    font-size: 60px; 
+  }
+}
+
+@media (max-width: 294px) {
+  .memoryHeader {
+    font-size: 60px; 
+  }
+  .resultHeader {
+    font-size: 40px; 
+  }
+
+}
+
+@media (max-width: 226px) {
+  .memoryHeader {
+    font-size: 40px; 
+  }
+  .resultHeader {
+    font-size: 20px; 
+  }
+}
+
+
+.crown{
+  font-size: 100px;
 }
