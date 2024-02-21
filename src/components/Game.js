@@ -38,7 +38,7 @@ function Game() {
     setSocket(socket);
   
     
-    const timer = setInterval(() => {
+    setInterval(() => {
       // Emit an event to the server
       socket.emit("trigger-server-event");
     }, 25 * 60 * 1000); // 25 minutes
