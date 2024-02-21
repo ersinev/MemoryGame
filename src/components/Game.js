@@ -41,10 +41,10 @@ function Game() {
     const timer = setInterval(() => {
       // Emit an event to the server
       socket.emit("trigger-server-event");
-    }, 10 * 60 * 1000); // 25 minutes
+    }, 25 * 60 * 1000); // 25 minutes
   
     
-    return () => clearInterval(timer);
+    //return () => clearInterval(timer);
   
    
   }, []);
