@@ -63,13 +63,13 @@ function Game() {
 
     socket.on("player-joined", (playersInRoom) => {
       setPlayers(playersInRoom);
-      console.log(playersInRoom)
+      
 
     });
 
     socket.on("player-left", (playersInRoom) => {
       setPlayers(playersInRoom);
-      console.log("this is triggered aswell")
+      
  
     });
 
