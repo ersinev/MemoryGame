@@ -33,21 +33,6 @@ function Game() {
   const [ModalOpen, setModalOpen] = useState(false)
 
 
-  useEffect(() => {
-    const socket = io("https://memorygame-we7d.onrender.com");
-    setSocket(socket);
-  
-    
-    setInterval(() => {
-      // Emit an event to the server
-      socket.emit("trigger-server-event");
-    }, 25 * 60 * 1000); // 25 minutes
-  
-    
-    //return () => clearInterval(timer);
-  
-   
-  }, []);
   
 
   useEffect(() => {
