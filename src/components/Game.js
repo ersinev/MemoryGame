@@ -59,7 +59,7 @@ function Game() {
     });
 
     socket.on("game-started", (gameId, cardsData, startTime) => {
-      // setGameId(gameId);
+      
       setCardsState(cardsData);
       setGameStartTime(startTime);
 
