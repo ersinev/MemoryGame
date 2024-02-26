@@ -37,18 +37,16 @@ function Game() {
     const socket = io("https://memorygame-we7d.onrender.com");
     setSocket(socket);
 
-    
-
     const keepServerAlive = setInterval(() => {
       socket.emit("keep-alive");
       console.log("Server pinged")
-    }, 5 * 60 * 1000); 
+    }, 5 * 60 * 1000); // 5 minutes
 
     return () => {
       clearInterval(keepServerAlive);
       socket.disconnect();
     };
-  }, [roomId, currentPlayerName]);
+}, []);
 
  
 
