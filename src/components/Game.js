@@ -33,24 +33,6 @@ function Game() {
   const [ModalOpen, setModalOpen] = useState(false)
 
 
-  useEffect(() => {
-    const socket = io("https://memorygame-we7d.onrender.com");
-    setSocket(socket);
-
-    const keepServerAlive = setInterval(() => {
-      socket.emit("keep-alive");
-      console.log("Server pinged")
-    }, 5 * 60 * 1000); // 5 minutes
-
-    return () => {
-      clearInterval(keepServerAlive);
-      socket.disconnect();
-    };
-}, []);
-
- 
-
-
 useEffect(() => {
   //http://localhost:5000
   //https://memorygame-we7d.onrender.com
