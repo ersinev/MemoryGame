@@ -41,6 +41,7 @@ function Game() {
 
     const keepServerAlive = setInterval(() => {
       socket.emit("keep-alive");
+      console.log("Server pinged")
     }, 5 * 60 * 1000); 
 
     return () => {
