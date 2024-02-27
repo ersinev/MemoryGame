@@ -91,19 +91,7 @@ function Game() {
     // Call the function again when roomId or currentPlayerName changes
   }, [roomId, currentPlayerName]);
 
-  useEffect(() => {
-    const timerId = setInterval(() => {
-        console.log("Trigger server event every 10 minutes");
-        const socket = io("https://memorygame-we7d.onrender.com");
-        // Assuming the server listens to a "timer-triggered" event
-        socket.emit("timer-triggered");
-        socket.disconnect();
-    }, 10 * 60 * 1000);
-
-    // Clear the timer when component unmounts
-    return () => clearInterval(timerId);
-}, []);
-
+ 
   useEffect(() => {
     checkForMatch();
     // eslint-disable-next-line
