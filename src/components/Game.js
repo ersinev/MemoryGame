@@ -36,7 +36,7 @@ function Game() {
   useEffect(() => {
     // Function to establish socket connection and join room
     const initializeSocketAndJoinRoom = () => {
-      console.log("server triggered")
+      // Establish socket connection
       const socket = io("https://memorygame-we7d.onrender.com");
       setSocket(socket);
   
@@ -85,242 +85,249 @@ function Game() {
       };
     };
   
-    // Call the function to initialize socket and join room
+    // Call the function to initialize socket and join room initially
     initializeSocketAndJoinRoom();
   
-    // Call the function again when roomId or currentPlayerName changes
+    // Call the function every 25 minutes
+    const interval = setInterval(() => {
+      initializeSocketAndJoinRoom();
+    }, 25 * 60 * 1000);
+  
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(interval);
   }, [roomId, currentPlayerName]);
+  
 
-useEffect(() => {
-  checkForMatch();
-  // eslint-disable-next-line
-}, [selectedCards]);
-
-
-useEffect(() => {
-  if (gameStartTime) {
-    const timerInterval = setInterval(() => {
-      setRemainingTime((prevRemainingTime) => {
-        const currentTime = Date.now();
-        const elapsedTime = currentTime - gameStartTime;
-        let newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
-
-        // testing miliseconds 1790000
-        if (newRemainingTime === 0) {
-          setShowContainer(false)
-          setShowResultpage(true)
-        }
-        // If the new remaining time is the same, clear the interval
-        if (newRemainingTime === prevRemainingTime) {
-          clearInterval(timerInterval);
-        }
-
-        return newRemainingTime;
-      });
-    }, 1000);
-
-    // Cleanup interval on component unmount or when game ends
-    return () => clearInterval(timerInterval);
-  }
-}, [gameStartTime, remainingTime]);
-
-useEffect(() => {
-  if (allCardsFlipped()) {
-    setShowContainer(false);
-    setShowResultpage(true);
-  }
-  // eslint-disable-next-line
-}, [gameState.matchedPairs]);
+  useEffect(() => {
+    checkForMatch();
+    // eslint-disable-next-line
+  }, [selectedCards]);
 
 
-useEffect(() => {
-  setlastMatchedPairs(matchedPairs[matchedPairs.length - 1]);
-  if (matchedPairs.length > 0) {
-    setModalOpen(true);
-  }
-}, [matchedPairs]);
+  useEffect(() => {
+    if (gameStartTime) {
+      const timerInterval = setInterval(() => {
+        setRemainingTime((prevRemainingTime) => {
+          const currentTime = Date.now();
+          const elapsedTime = currentTime - gameStartTime;
+          let newRemainingTime = Math.max(0, 30 * 60 * 1000 - elapsedTime);
 
-useEffect(() => {
-  // Check if socket is available before setting up the event listener
-  if (socket) {
-    // Listen for the "matched-pairs" event and update the state
-    socket.on("matched-pairs", (matchedPairsFromServer) => {
-      // Update the matchedPairs state with the data from the server
-      setMatchedPairs(matchedPairsFromServer);
-      // Open the modal when there are matched pairs
+          // testing miliseconds 1790000
+          if (newRemainingTime === 0) {
+            setShowContainer(false)
+            setShowResultpage(true)
+          }
+          // If the new remaining time is the same, clear the interval
+          if (newRemainingTime === prevRemainingTime) {
+            clearInterval(timerInterval);
+          }
+
+          return newRemainingTime;
+        });
+      }, 1000);
+
+      // Cleanup interval on component unmount or when game ends
+      return () => clearInterval(timerInterval);
+    }
+  }, [gameStartTime, remainingTime]);
+
+  useEffect(() => {
+    if (allCardsFlipped()) {
+      setShowContainer(false);
+      setShowResultpage(true);
+    }
+    // eslint-disable-next-line
+  }, [gameState.matchedPairs]);
+
+
+  useEffect(() => {
+    setlastMatchedPairs(matchedPairs[matchedPairs.length - 1]);
+    if (matchedPairs.length > 0) {
       setModalOpen(true);
-    });
+    }
+  }, [matchedPairs]);
 
-    // Clean up the event listener when the component unmounts
-    return () => {
-      socket.off("matched-pairs");
-    };
-  }
-}, [socket]);
+  useEffect(() => {
+    // Check if socket is available before setting up the event listener
+    if (socket) {
+      // Listen for the "matched-pairs" event and update the state
+      socket.on("matched-pairs", (matchedPairsFromServer) => {
+        // Update the matchedPairs state with the data from the server
+        setMatchedPairs(matchedPairsFromServer);
+        // Open the modal when there are matched pairs
+        setModalOpen(true);
+      });
 
-const allCardsFlipped = () => {
-  return cardsState.every((card) => card.isFlipped);
-};
+      // Clean up the event listener when the component unmounts
+      return () => {
+        socket.off("matched-pairs");
+      };
+    }
+  }, [socket]);
 
-const updateCardState = (cardId, isFlipped) => {
-  setCardsState((prevState) =>
-    prevState.map((card) =>
-      card.id === cardId ? { ...card, isFlipped } : card
-    )
-  );
-};
+  const allCardsFlipped = () => {
+    return cardsState.every((card) => card.isFlipped);
+  };
 
-const closeCards = (closedCardIds) => {
-  setCardsState((prevState) => {
-    const updatedState = prevState.map((card) =>
-      closedCardIds.includes(card.id) ? { ...card, isFlipped: false } : card
+  const updateCardState = (cardId, isFlipped) => {
+    setCardsState((prevState) =>
+      prevState.map((card) =>
+        card.id === cardId ? { ...card, isFlipped } : card
+      )
     );
+  };
 
-    return updatedState;
-  });
-};
+  const closeCards = (closedCardIds) => {
+    setCardsState((prevState) => {
+      const updatedState = prevState.map((card) =>
+        closedCardIds.includes(card.id) ? { ...card, isFlipped: false } : card
+      );
+
+      return updatedState;
+    });
+  };
 
 
-const handleClick = (clickedCard) => {
-  if (
-    clickedCard.isFlipped ||
-    selectedCards.length >= 2 ||
-    disableClick ||
-    currentTurn !== socket.id
-  ) {
-    return;
-  }
-
-  // Use the callback function to get the latest state
-  setSelectedCards((prevSelectedCards) => {
-    const newSelectedCards = [...prevSelectedCards, clickedCard];
-
-    // Emit the "flip-card" event with the newSelectedCards
-    socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id, newSelectedCards);
-
-    return newSelectedCards;
-  });
-};
-
-const checkForMatch = () => {
-  if (
-    selectedCards.length === 2 &&
-    !selectedCards.some((card) => card.isFlipped) &&
-    !disableClick &&
-    currentTurn === socket.id
-  ) {
-    const [firstCard, secondCard] = selectedCards;
-
-    if (firstCard.key === secondCard.key) {
-      // Cards match logic
-      const newMatchedPair = firstCard.key;
-
-      if (!matchedPairs.includes(newMatchedPair)) {
-        // Update the matchedPairs array with the new matched pair
-        setMatchedPairs([...matchedPairs, newMatchedPair]);
-
-        // Update points for the current player and emit to the server
-        const currentPlayerId = currentTurn;
-        const updatedPoints = {
-          ...points,
-          [currentPlayerId]: (points[currentPlayerId] || 0) + 1,
-        };
-        setPoints(updatedPoints);
-        socket.emit("update-points", roomId, updatedPoints);
-        socket.emit("update-game-state", roomId, currentPlayerName, firstCard.id);
-      }
-
-      // Keep the matched pairs open
-      updateCardState(firstCard.id, true);
-      updateCardState(secondCard.id, true);
-
-      // Rotate turn after a delay
-      setTimeout(() => {
-        rotateTurn(selectedCards);
-      }, 1000);
-    } else {
-      // Cards do not match logic
-      setDisableClick(true);
-
-      // Close the unmatched cards after a delay
-      setTimeout(() => {
-        const closingCardIds = selectedCards.map((card) => card.id);
-        closeCards(closingCardIds);
-
-        setDisableClick(false);
-        rotateTurn(selectedCards);
-      }, 1000);
+  const handleClick = (clickedCard) => {
+    if (
+      clickedCard.isFlipped ||
+      selectedCards.length >= 2 ||
+      disableClick ||
+      currentTurn !== socket.id
+    ) {
+      return;
     }
 
-    setSelectedCards([]);
-  }
-};
+    // Use the callback function to get the latest state
+    setSelectedCards((prevSelectedCards) => {
+      const newSelectedCards = [...prevSelectedCards, clickedCard];
 
-const rotateTurn = (selectedCards) => {
-  socket.emit("end-turn", roomId, selectedCards);
-};
+      // Emit the "flip-card" event with the newSelectedCards
+      socket.emit("flip-card", roomId, currentPlayerName, clickedCard.id, newSelectedCards);
 
-const isCardMatched = (card) => {
-  return matchedPairs.includes(card.key);
-};
+      return newSelectedCards;
+    });
+  };
 
-const handleStartGame = (enteredRoomId, playerName) => {
-  setShowEntryPage(false);
-  setShowContainer(true);
-  setCurrentPlayerName(playerName);
-  setRoomId(enteredRoomId);
-};
+  const checkForMatch = () => {
+    if (
+      selectedCards.length === 2 &&
+      !selectedCards.some((card) => card.isFlipped) &&
+      !disableClick &&
+      currentTurn === socket.id
+    ) {
+      const [firstCard, secondCard] = selectedCards;
+
+      if (firstCard.key === secondCard.key) {
+        // Cards match logic
+        const newMatchedPair = firstCard.key;
+
+        if (!matchedPairs.includes(newMatchedPair)) {
+          // Update the matchedPairs array with the new matched pair
+          setMatchedPairs([...matchedPairs, newMatchedPair]);
+
+          // Update points for the current player and emit to the server
+          const currentPlayerId = currentTurn;
+          const updatedPoints = {
+            ...points,
+            [currentPlayerId]: (points[currentPlayerId] || 0) + 1,
+          };
+          setPoints(updatedPoints);
+          socket.emit("update-points", roomId, updatedPoints);
+          socket.emit("update-game-state", roomId, currentPlayerName, firstCard.id);
+        }
+
+        // Keep the matched pairs open
+        updateCardState(firstCard.id, true);
+        updateCardState(secondCard.id, true);
+
+        // Rotate turn after a delay
+        setTimeout(() => {
+          rotateTurn(selectedCards);
+        }, 1000);
+      } else {
+        // Cards do not match logic
+        setDisableClick(true);
+
+        // Close the unmatched cards after a delay
+        setTimeout(() => {
+          const closingCardIds = selectedCards.map((card) => card.id);
+          closeCards(closingCardIds);
+
+          setDisableClick(false);
+          rotateTurn(selectedCards);
+        }, 1000);
+      }
+
+      setSelectedCards([]);
+    }
+  };
+
+  const rotateTurn = (selectedCards) => {
+    socket.emit("end-turn", roomId, selectedCards);
+  };
+
+  const isCardMatched = (card) => {
+    return matchedPairs.includes(card.key);
+  };
+
+  const handleStartGame = (enteredRoomId, playerName) => {
+    setShowEntryPage(false);
+    setShowContainer(true);
+    setCurrentPlayerName(playerName);
+    setRoomId(enteredRoomId);
+  };
 
 
-return (
-  <>
-    <div className="container-fluid main">
-      {showEntryPage && (
-        <div className="entryPage" style={{ color: "white" }}>
+  return (
+    <>
+      <div className="container-fluid main">
+        {showEntryPage && (
+          <div className="entryPage" style={{ color: "white" }}>
 
-          <PlayerInput onJoinGame={handleStartGame} setTheRoom={setRoomId} />
-        </div>
-      )}
-
-      {showContainer && (
-        <div className="container">
-          <Timer remainingTime={remainingTime} />
-          <Players
-            players={players}
-            currentTurn={currentTurn}
-            points={points}
-            setPoints={setPoints}
-          />
-          <div className="memory-game">
-            {cardsState.map((card) => (
-              <Card
-                key={card.id}
-                card={card}
-                onClick={() => handleClick(card)}
-                image={card.img}
-                isMatched={isCardMatched(card)}
-                isTurned={gameState.turnedCards.some(
-                  (turn) => turn.cardId === card.id
-                )}
-                disableClick={disableClick}
-              />
-            ))}
+            <PlayerInput onJoinGame={handleStartGame} setTheRoom={setRoomId} />
           </div>
-        </div>
-      )}
+        )}
+
+        {showContainer && (
+          <div className="container">
+            <Timer remainingTime={remainingTime} />
+            <Players
+              players={players}
+              currentTurn={currentTurn}
+              points={points}
+              setPoints={setPoints}
+            />
+            <div className="memory-game">
+              {cardsState.map((card) => (
+                <Card
+                  key={card.id}
+                  card={card}
+                  onClick={() => handleClick(card)}
+                  image={card.img}
+                  isMatched={isCardMatched(card)}
+                  isTurned={gameState.turnedCards.some(
+                    (turn) => turn.cardId === card.id
+                  )}
+                  disableClick={disableClick}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
 
-      {showResultPage && (
-        <div style={{ "color": "white" }}>
-          <Result players={players} points={points} />
-        </div>
-      )}
+        {showResultPage && (
+          <div style={{ "color": "white" }}>
+            <Result players={players} points={points} />
+          </div>
+        )}
 
-      <Modal modalOpen={ModalOpen} closeModal={() => setModalOpen(false)} lastMatchedPairs={lastMatchedPairs} cardsState={cardsState} />
+        <Modal modalOpen={ModalOpen} closeModal={() => setModalOpen(false)} lastMatchedPairs={lastMatchedPairs} cardsState={cardsState} />
 
-    </div>
-  </>
-);
+      </div>
+    </>
+  );
 }
 
 export default Game;
