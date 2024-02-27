@@ -33,65 +33,63 @@ function Game() {
   const [ModalOpen, setModalOpen] = useState(false)
 
 
-useEffect(() => {
-  //http://localhost:5000
-  //https://memorygame-we7d.onrender.com
-  const socket = io("https://memorygame-we7d.onrender.com");
-  setSocket(socket);
-
-  if (roomId && currentPlayerName) {
-    socket.emit("join-room", roomId, currentPlayerName);
-
-  }
-
-  socket.on("player-joined", (playersInRoom) => {
-    setPlayers(playersInRoom);
-
-
-  });
-
-  socket.on("player-left", (playersInRoom) => {
-    setPlayers(playersInRoom);
-
-
-  });
-
-  socket.on("game-started", (gameId, cardsData, startTime) => {
-
-    setCardsState(cardsData);
-    setGameStartTime(startTime);
-
-  });
-
-  socket.on("turn-change", (newTurn) => {
-    setCurrentTurn(newTurn);
-
-  });
-
-
-  socket.on("update-game-state", (updatedGameState) => {
-    setGameState(updatedGameState);
-
-  });
-
-  socket.on("close-cards", (closedCardIds) => {
-    closeCards(closedCardIds);
-  });
-
-  socket.on("flip-card", (playerName, cardId) => {
-
-    updateCardState(cardId, true);
-  });
-
-  socket.on("update-points", (updatedPoints) => {
-    setPoints(updatedPoints);
-  })
-
-
-  return () => {
-    socket.disconnect();
-  };
-}, [roomId, currentPlayerName]);
+  useEffect(() => {
+    // Function to establish socket connection and join room
+    const initializeSocketAndJoinRoom = () => {
+      console.log("server triggered")
+      const socket = io("https://memorygame-we7d.onrender.com");
+      setSocket(socket);
+  
+      // Join room if both roomId and currentPlayerName are available
+      if (roomId && currentPlayerName) {
+        socket.emit("join-room", roomId, currentPlayerName);
+      }
+  
+      // Set up event listeners
+      socket.on("player-joined", (playersInRoom) => {
+        setPlayers(playersInRoom);
+      });
+  
+      socket.on("player-left", (playersInRoom) => {
+        setPlayers(playersInRoom);
+      });
+  
+      socket.on("game-started", (gameId, cardsData, startTime) => {
+        setCardsState(cardsData);
+        setGameStartTime(startTime);
+      });
+  
+      socket.on("turn-change", (newTurn) => {
+        setCurrentTurn(newTurn);
+      });
+  
+      socket.on("update-game-state", (updatedGameState) => {
+        setGameState(updatedGameState);
+      });
+  
+      socket.on("close-cards", (closedCardIds) => {
+        closeCards(closedCardIds);
+      });
+  
+      socket.on("flip-card", (playerName, cardId) => {
+        updateCardState(cardId, true);
+      });
+  
+      socket.on("update-points", (updatedPoints) => {
+        setPoints(updatedPoints);
+      });
+  
+      // Return cleanup function
+      return () => {
+        socket.disconnect();
+      };
+    };
+  
+    // Call the function to initialize socket and join room
+    initializeSocketAndJoinRoom();
+  
+    // Call the function again when roomId or currentPlayerName changes
+  }, [roomId, currentPlayerName]);
 
 useEffect(() => {
   checkForMatch();
