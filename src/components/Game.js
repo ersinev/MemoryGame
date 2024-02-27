@@ -36,75 +36,61 @@ function Game() {
   useEffect(() => {
     // Function to establish socket connection and join room
     const initializeSocketAndJoinRoom = () => {
-      console.log("Server triggered initially");
+      console.log("server triggered")
       const socket = io("https://memorygame-we7d.onrender.com");
       setSocket(socket);
-  
+
       // Join room if both roomId and currentPlayerName are available
       if (roomId && currentPlayerName) {
         socket.emit("join-room", roomId, currentPlayerName);
       }
-  
+
       // Set up event listeners
       socket.on("player-joined", (playersInRoom) => {
         setPlayers(playersInRoom);
       });
-  
+
       socket.on("player-left", (playersInRoom) => {
         setPlayers(playersInRoom);
       });
-  
+
       socket.on("game-started", (gameId, cardsData, startTime) => {
         setCardsState(cardsData);
         setGameStartTime(startTime);
       });
-  
+
       socket.on("turn-change", (newTurn) => {
         setCurrentTurn(newTurn);
       });
-  
+
       socket.on("update-game-state", (updatedGameState) => {
         setGameState(updatedGameState);
       });
-  
+
       socket.on("close-cards", (closedCardIds) => {
         closeCards(closedCardIds);
       });
-  
+
       socket.on("flip-card", (playerName, cardId) => {
         updateCardState(cardId, true);
       });
-  
+
       socket.on("update-points", (updatedPoints) => {
         setPoints(updatedPoints);
       });
-  
+
       // Return cleanup function
       return () => {
         socket.disconnect();
       };
     };
-  
+
     // Call the function to initialize socket and join room
     initializeSocketAndJoinRoom();
-  
-    // Set up interval to emit a useless event to the server every 25 minutes
-    const serverTriggerInterval = setInterval(() => {
-      // This emits a useless event to the server
-      socket.emit("useless-event");
-      console.log("Useless event emitted to the server");
-    }, 25 * 60 * 1000); // 25 minutes
-  
-    // Clean up the interval and socket connection when the component unmounts or when roomId or currentPlayerName changes
-    return () => {
-      clearInterval(serverTriggerInterval);
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, [roomId, currentPlayerName, socket]); // Include socket in the dependency array
-  
-  
+
+    // Call the function again when roomId or currentPlayerName changes
+  }, [roomId, currentPlayerName]);
+
 
   useEffect(() => {
     checkForMatch();
