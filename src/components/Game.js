@@ -93,12 +93,12 @@ function Game() {
 
   useEffect(() => {
     const timerId = setInterval(() => {
-        console.log("Trigger server event every 1 minutes");
+        console.log("Trigger server event every 10 minutes");
         const socket = io("https://memorygame-we7d.onrender.com");
         // Assuming the server listens to a "timer-triggered" event
         socket.emit("timer-triggered");
         socket.disconnect();
-    }, 1 * 60 * 1000);
+    }, 10 * 60 * 1000);
 
     // Clear the timer when component unmounts
     return () => clearInterval(timerId);
