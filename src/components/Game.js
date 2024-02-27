@@ -102,7 +102,8 @@ function Game() {
         socket.disconnect();
       }
     };
-  }, [roomId, currentPlayerName]);
+  }, [roomId, currentPlayerName, socket]); // Include socket in the dependency array
+  
   
 
   useEffect(() => {
