@@ -36,7 +36,7 @@ function Game() {
   useEffect(() => {
     // Function to establish socket connection and join room
     const initializeSocketAndJoinRoom = () => {
-      console.log("server triggered")
+      console.log("Server triggered initially");
       const socket = io("https://memorygame-we7d.onrender.com");
       setSocket(socket);
   
@@ -85,16 +85,23 @@ function Game() {
       };
     };
   
-    // Call the function to initialize socket and join room initially
+    // Call the function to initialize socket and join room
     initializeSocketAndJoinRoom();
   
-    // Call the function every 25 minutes
-    const interval = setInterval(() => {
-      initializeSocketAndJoinRoom();
-    }, 25 * 60 * 1000);
+    // Set up interval to emit a useless event to the server every 25 minutes
+    const serverTriggerInterval = setInterval(() => {
+      // This emits a useless event to the server
+      socket.emit("useless-event");
+      console.log("Useless event emitted to the server");
+    }, 25 * 60 * 1000); // 25 minutes
   
-    // Clean up the interval when the component unmounts
-    return () => clearInterval(interval);
+    // Clean up the interval and socket connection when the component unmounts or when roomId or currentPlayerName changes
+    return () => {
+      clearInterval(serverTriggerInterval);
+      if (socket) {
+        socket.disconnect();
+      }
+    };
   }, [roomId, currentPlayerName]);
   
 
