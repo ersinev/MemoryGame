@@ -36,7 +36,7 @@ function Game() {
   useEffect(() => {
     // Function to establish socket connection and join room
     const initializeSocketAndJoinRoom = () => {
-      // Establish socket connection
+      console.log("server triggered")
       const socket = io("https://memorygame-we7d.onrender.com");
       setSocket(socket);
   
