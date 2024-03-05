@@ -37,6 +37,8 @@ function Game() {
     // Function to establish socket connection and join room
     const initializeSocketAndJoinRoom = () => {
       console.log("server triggered")
+      //http://localhost:5000
+      //https://memorygame-we7d.onrender.com
       const socket = io("https://memorygame-we7d.onrender.com");
       setSocket(socket);
 

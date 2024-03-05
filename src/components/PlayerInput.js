@@ -38,7 +38,7 @@ function PlayerInput({ onJoinGame }) {
                 <Form.Label className="float-start">Room ID</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Room ID"
+                  placeholder="Bijvoorbeeld: team1, MariaSchool2, groep2"
                   value={roomId}
                   onChange={(e) => setRoomId(e.target.value)}
                 />
