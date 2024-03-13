@@ -39,7 +39,7 @@ function Game() {
       console.log("server triggered")
       //http://localhost:5000
       //https://memorygame-we7d.onrender.com
-      const socket = io("https://memorygame-we7d.onrender.com");
+      const socket = io("http://localhost:5000");
       setSocket(socket);
 
       // Join room if both roomId and currentPlayerName are available
@@ -122,7 +122,7 @@ function Game() {
         });
       }, 1000);
 
-      // Cleanup interval on component unmount or when game ends
+      // Cleanup interval on component unmount or when game ends//
       return () => clearInterval(timerInterval);
     }
   }, [gameStartTime, remainingTime]);
