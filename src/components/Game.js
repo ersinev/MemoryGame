@@ -39,7 +39,7 @@ function Game() {
       console.log("server triggered")
       //http://localhost:5000
       //https://memorygame-we7d.onrender.com
-      const socket = io("http://localhost:5000");
+      const socket = io("https://memorygame-we7d.onrender.com");
       setSocket(socket);
 
       // Join room if both roomId and currentPlayerName are available
