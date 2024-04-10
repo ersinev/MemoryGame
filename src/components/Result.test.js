@@ -1,7 +1,7 @@
 import React from "react";
 import Result from "./Result";
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom"; 
+import "@testing-library/jest-dom";  
 
 describe('Result component', () => {
     test('renders winners with their points', () => {
