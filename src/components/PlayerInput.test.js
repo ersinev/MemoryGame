@@ -34,7 +34,18 @@ describe('Game component for testing', () => {
         fireEvent.click(startGameButton);
     
         expect(onJoinGameMock).toHaveBeenCalledWith('room1', 'John');
-      });
+    });
+
+    test('displasys alert when Sttart Game button is clicked with empty inputs', () => {
+        const alertMock = jest.spyOn(window,'alert').mockImplementation(()=>{})
+        render(<PlayerInput/>)
+        const startGameButton = screen.getByText(/Start Game/i)
+
+        fireEvent.click(startGameButton)
+
+        expect(alertMock).toHaveBeenCalledWith('Please enter your name and room ID.')
+    })
+
 
 
 
