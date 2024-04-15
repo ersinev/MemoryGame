@@ -38,5 +38,9 @@ describe('Result component', () => {
         expect(screen.getByText('Player 2: 10 punten')).toBeInTheDocument();
     });
 
+    
      
+
+
+
 });

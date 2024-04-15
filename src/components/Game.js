@@ -286,7 +286,7 @@ function Game() {
         )}
 
         {showContainer && (
-          <div className="container">
+          <div className="container" data-testid="game-container">
             <Timer remainingTime={remainingTime} />
             <Players
               players={players}

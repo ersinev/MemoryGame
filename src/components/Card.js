@@ -1,4 +1,4 @@
-
+import React from "react";
 function Card({ card, onClick, image, isMatched }) {
   return (
     <div
