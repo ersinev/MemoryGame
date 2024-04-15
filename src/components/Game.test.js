@@ -20,11 +20,11 @@ describe('Game component testing', () => {
 
         fireEvent.change(playerInput, {target: {value: "player1"}})
         fireEvent.change(roomInput, {target: {value: "123"}})
-
         fireEvent.click(startButton)
 
         await waitFor(() => {
-            expect(startGameMock).toHaveBeenCalledWith("123", "player1"); 
+            expect(startGameMock).toHaveBeenCalledWith('123', 'player1')
+            
             
         })      
     })
