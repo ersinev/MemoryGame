@@ -11,7 +11,7 @@ describe('Game component testing', () => {
     })
 
     test('allows entering player information and starting the game', async () => {
-        render(<Game/>)
+        render(<Game handleStartGame={startGameMock}/>)
 
         const startGameMock = jest.fn();
         const playerInput = screen.getByPlaceholderText(/Vul je naam in/i)
