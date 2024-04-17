@@ -25,7 +25,7 @@ describe('Game component testing', () => {
       
 
         await waitFor(() => {
-            expect(playerInput).toBeInTheDocument();
+            expect(playerInput).toHaveTheValue('player1')
         })
 
     })
