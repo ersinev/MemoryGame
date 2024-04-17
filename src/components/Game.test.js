@@ -1,6 +1,6 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import { fireEvent, render, waitFor,screen } from "@testing-library/react";
+import { fireEvent, render, waitFor, screen } from "@testing-library/react";
 import Game from "./Game";
 
 describe('Game component testing', () => {
@@ -10,24 +10,28 @@ describe('Game component testing', () => {
         )
     })
 
-    test('allows entering player information and starting the game', async () => {
-        render(<Game handleStartGame={startGameMock}/>)
+    test('allows entering player information and starting the game', () => {
+        render(<Game />)
 
-        const startGameMock = jest.fn();
         const playerInput = screen.getByPlaceholderText(/Vul je naam in/i)
         const roomInput = screen.getByPlaceholderText(/Bijvoorbeeld: team1, MariaSchool2, groep2/i)
         const startButton = screen.getByText(/Start Game/i)
 
-        fireEvent.change(playerInput, {target: {value: "player1"}})
-        fireEvent.change(roomInput, {target: {value: "123"}})
+        // Check if input fields are initially empty
+        expect(playerInput).toHaveValue('')
+        expect(roomInput).toHaveValue('')
+
+        fireEvent.change(playerInput, { target: { value: "player1" } })
+        fireEvent.change(roomInput, { target: { value: "123" } })
         fireEvent.click(startButton)
 
-        await waitFor(() => {
-            expect(startGameMock).toHaveBeenCalledWith('123', 'player1')
-            
-            
-        })      
+        // Wait for the player name to be displayed in the document
+
+        const userName = screen.getByText(/player1/i); // Using regular expression with case-insensitivity
+        expect(userName).toBeInTheDocument();
+
     })
+
 
 
 
