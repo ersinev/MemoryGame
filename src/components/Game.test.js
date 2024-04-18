@@ -10,7 +10,7 @@ describe('Game component testing', () => {
         )
     })
 
-    test('allows entering player information and starting the game', async() => {
+    test('allows entering player information and starting the game.', async() => {
        
         render(<Game />)
 
