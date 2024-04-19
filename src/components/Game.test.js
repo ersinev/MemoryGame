@@ -17,11 +17,11 @@ describe('Game component testing', () => {
         const playerInput = screen.getByPlaceholderText(/Vul je naam in/i)
         const roomInput = screen.getByPlaceholderText(/Bijvoorbeeld: team1, MariaSchool2, groep2/i)
         const startButton = screen.getByText(/Start Game/i)
-
+        
         fireEvent.change(playerInput, { target: { value: "player1" } })
         fireEvent.change(roomInput, { target: { value: "123" } })
         fireEvent.click(startButton)
-
+        
       
 
         await waitFor(() => {
