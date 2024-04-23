@@ -48,17 +48,18 @@ const CustomTableContainer = styled(TableContainer)({
 function PlayerRecord() {
   const [records, setRecords] = useState([]);
 
-  useEffect(() => {
-    const fetchPlayerRecords = async () => {
-      try {
-        const response = await fetch("https://memorygame-we7d.onrender.com/player/records");
-        const data = await response.json();
-        setRecords(data);
-      } catch (error) {
-        console.error("Error fetching player records:", error);
-      }
-    };
+  // Function to fetch player records
+  const fetchPlayerRecords = async () => {
+    try {
+      const response = await fetch("https://memorygame-we7d.onrender.com/player/records");
+      const data = await response.json();
+      setRecords(data);
+    } catch (error) {
+      console.error("Error fetching player records:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchPlayerRecords();
   }, []);
 
