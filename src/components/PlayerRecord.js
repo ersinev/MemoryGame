@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Button } from 'react-bootstrap';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -69,8 +69,35 @@ function PlayerRecord() {
     return formattedDate;
   };
 
+  // Function to handle deletion of a player record
+  const handleDelete = async (id) => {
+    try {
+      await fetch(`https://memorygame-we7d.onrender.com/player/${id}`, {
+        method: 'DELETE'
+      });
+      // After successful deletion, fetch updated records
+      fetchPlayerRecords();
+    } catch (error) {
+      console.error("Error deleting player record:", error);
+    }
+  };
+
+  // Function to handle deletion of all player records
+  const handleDeleteAll = async () => {
+    try {
+      await fetch(`https://memorygame-we7d.onrender.com/player/delete-all`, {
+        method: 'DELETE'
+      });
+      // After successful deletion, fetch updated records
+      fetchPlayerRecords();
+    } catch (error) {
+      console.error("Error deleting all player records:", error);
+    }
+  };
+
   return (
     <Container>
+      <Button variant="danger" onClick={handleDeleteAll} style={{ marginBottom: '10px' }}>Delete All</Button> {/* Button to delete all records */}
       <CustomTableContainer component={Paper}>
         <CustomTable>
           <CustomTableHead>
@@ -78,6 +105,7 @@ function PlayerRecord() {
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell align='center' >Date</StyledTableCell>
               <StyledTableCell >Elapsed Time</StyledTableCell>
+              <StyledTableCell>Action</StyledTableCell> {/* Added new cell for action */}
             </TableRow>
           </CustomTableHead>
           <TableBody>
@@ -88,6 +116,9 @@ function PlayerRecord() {
                 </StyledTableCell>
                 <StyledTableCell align="right">{formatDate(record.startTime)}</StyledTableCell>
                 <StyledTableCell align="right">{record.elapsedTime}</StyledTableCell>
+                <StyledTableCell align="right">
+                  <Button variant="danger" onClick={() => handleDelete(record._id)}>Delete</Button>
+                </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
