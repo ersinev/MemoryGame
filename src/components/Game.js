@@ -269,32 +269,35 @@ function Game() {
     return matchedPairs.includes(card.key);
   };
 
-  const handleStartGame = (enteredRoomId, playerName) => {
+  const handleStartGame = async (enteredRoomId, playerName) => {
     setShowEntryPage(false);
     setShowContainer(true);
     setCurrentPlayerName(playerName);
     setRoomId(enteredRoomId);
-    console.log(socket.id)
-    // Oyuncunun adını ve başlangıç zamanını backend'e gönder
-    fetch('https://memorygame-we7d.onrender.com/player/start', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      
-      name: playerName,
-      roomId:roomId,
-      startTime: Date.now(),
-    }),
-  })
-    .then(response => response.json())
-    .then(data => {
+    console.log(socket.id);
+  
+    try {
+      const response = await fetch('https://memorygame-we7d.onrender.com/player/start', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: playerName,
+          roomId: roomId,
+          startTime: Date.now(),
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('HTTP error ' + response.status);
+      }
+  
+      const data = await response.json();
       console.log('Başlangıç zamanı ve socket ID kaydedildi:', data);
-    })
-    .catch(error => {
+    } catch (error) {
       console.error('Hata:', error);
-    });
+    }
   };
 
 

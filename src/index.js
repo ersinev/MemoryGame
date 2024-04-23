@@ -17,4 +17,5 @@ root.render(
       <Route exact path="/records" element={<PlayerRecord/>} />
     </Routes>
   </Router>
+  
 );
