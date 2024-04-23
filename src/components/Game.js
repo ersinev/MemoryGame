@@ -41,6 +41,8 @@ function Game() {
       //https://memorygame-we7d.onrender.com
       const socket = io("https://memorygame-we7d.onrender.com");
       setSocket(socket);
+      
+      
 
       // Join room if both roomId and currentPlayerName are available
       if (roomId && currentPlayerName) {
@@ -93,7 +95,7 @@ function Game() {
     // Call the function again when roomId or currentPlayerName changes
   }, [roomId, currentPlayerName]);
 
- 
+
   useEffect(() => {
     checkForMatch();
     // eslint-disable-next-line
@@ -272,6 +274,27 @@ function Game() {
     setShowContainer(true);
     setCurrentPlayerName(playerName);
     setRoomId(enteredRoomId);
+    console.log(socket.id)
+    // Oyuncunun adını ve başlangıç zamanını backend'e gönder
+    fetch('https://memorygame-we7d.onrender.com/player/start', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      
+      name: playerName,
+      roomId:roomId,
+      startTime: Date.now(),
+    }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Başlangıç zamanı ve socket ID kaydedildi:', data);
+    })
+    .catch(error => {
+      console.error('Hata:', error);
+    });
   };
 
 
