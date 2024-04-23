@@ -14,7 +14,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    padding: '12px 8px', // Başlık hücrelerinin padding değeri
+    padding: '12px 8px',
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -25,7 +25,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
-  // Son border'ı gizle
+  
   '&:last-child td, &:last-child th': {
     border: 0,
   },
@@ -33,16 +33,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const CustomTableHead = styled(TableHead)({
   '& th': {
-    padding: '12px 8px', // Başlık hücrelerinin padding değeri
+    padding: '12px 8px', 
   },
 });
 
 const CustomTable = styled(Table)({
-  width: 'fit-content', // Tablo genişliği içeriğe göre ayarlanacak
+  width: 'fit-content', 
 });
 
 const CustomTableContainer = styled(TableContainer)({
-  maxWidth: 'fit-content', // Tablo container'ının içeriğe sığacak şekilde genişliği ayarlandı
+  maxWidth: 'fit-content'
 });
 
 function PlayerRecord() {
@@ -63,7 +63,7 @@ function PlayerRecord() {
     fetchPlayerRecords();
   }, []);
 
-  // Tarih zaman formatını düzenlemek için fonksiyon
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
