@@ -98,7 +98,7 @@ function PlayerRecord() {
 
   return (
     <Container>
-      <Button variant="danger" onClick={handleDeleteAll} style={{ marginBottom: '10px' }}>Delete All</Button> {/* Button to delete all records */}
+      <Button variant="danger" onClick={handleDeleteAll} style={{ marginBottom: '10px', marginTop: '10px' }}>Delete All</Button> {/* Button to delete all records */}
       <CustomTableContainer component={Paper}>
         <CustomTable>
           <CustomTableHead>
