@@ -12,12 +12,16 @@ import { Container, Button } from 'react-bootstrap';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+    backgroundColor: "green",
+    color: "whitesmoke",
     padding: '12px 8px',
+    fontSize: 18,
+    fontWeight: "bolder"
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
+    backgroundColor: "whitesmoke",
+    fontWeight: "bolder"
   },
 }));
 
@@ -25,7 +29,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
-  
+
   '&:last-child td, &:last-child th': {
     border: 0,
   },
@@ -33,12 +37,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const CustomTableHead = styled(TableHead)({
   '& th': {
-    padding: '12px 8px', 
+    padding: '12px 8px',
   },
 });
 
 const CustomTable = styled(Table)({
-  width: 'fit-content', 
+  width: 'fit-content',
 });
 
 const CustomTableContainer = styled(TableContainer)({
@@ -63,6 +67,17 @@ function PlayerRecord() {
     fetchPlayerRecords();
   }, []);
 
+  
+
+  // // Function to format time in minutes and seconds
+  // const formatTime = (totalSeconds) => {
+  //   const minutes = Math.floor(totalSeconds / 60);
+  //   const seconds = totalSeconds % 60;
+  //   return `${minutes}m ${seconds}s`;
+  // };
+
+  
+  const totalPlayers = records.length;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -73,7 +88,7 @@ function PlayerRecord() {
   // Function to handle deletion of a player record
   const handleDelete = async (id) => {
     try {
-      await fetch(`https://memorygame-we7d.onrender.com/player/${id}`, {
+      await fetch(`http://https://memorygame-we7d.onrender.com/player/${id}`, {
         method: 'DELETE'
       });
       // After successful deletion, fetch updated records
@@ -98,19 +113,22 @@ function PlayerRecord() {
 
   return (
     <Container>
-      <Button variant="danger" onClick={handleDeleteAll} style={{ marginBottom: '10px', marginTop: '10px' }}>Delete All</Button> {/* Button to delete all records */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "10px" }}>
+        <p style={{ color: "white", marginBottom: "5px", fontSize: "18px" }}>All-Time Players: {totalPlayers}</p>
+      </div>
+      <Button variant="danger" onClick={handleDeleteAll} style={{ marginBottom: '10px', padding: "5px" }}>Delete All</Button> {/* Button to delete all records */}
       <CustomTableContainer component={Paper}>
         <CustomTable>
           <CustomTableHead>
             <TableRow>
               <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell align='center' >Date</StyledTableCell>
-              <StyledTableCell >Elapsed Time</StyledTableCell>
-              <StyledTableCell>Action</StyledTableCell> {/* Added new cell for action */}
+              <StyledTableCell align='center'>Date</StyledTableCell>
+              <StyledTableCell align='center'>Time</StyledTableCell>
+              <StyledTableCell align='center'>Action</StyledTableCell>
             </TableRow>
           </CustomTableHead>
           <TableBody>
-            {records.map((record) => (
+            {records.slice().reverse().map((record) => (
               <StyledTableRow key={record._id}>
                 <StyledTableCell component="th" scope="row">
                   {record.name}
