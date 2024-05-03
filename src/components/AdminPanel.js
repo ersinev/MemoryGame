@@ -5,9 +5,12 @@ import { io } from "socket.io-client";
 function AdminPanel() {
   const [roomData, setRoomData] = useState({});
   const [totalOnlineUsers, setTotalOnlineUsers] = useState(0);
+  //"http://localhost:5000"
+  //"https://memorygame-we7d.onrender.com"
+  const url = "https://memorygame-we7d.onrender.com"
 
   useEffect(() => {
-    const adminSocket = io("http://localhost:5000", {
+    const adminSocket = io(url, {
       transports: ["websocket"],
       query: "room=admin",
     });

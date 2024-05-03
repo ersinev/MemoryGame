@@ -9,6 +9,11 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
 import { Container, Button } from 'react-bootstrap';
+import { MdDeleteForever } from "react-icons/md";
+//"http://localhost:5000"
+  //"https://memorygame-we7d.onrender.com"
+  const url = "https://memorygame-we7d.onrender.com"
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -36,6 +41,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const CustomTableHead = styled(TableHead)({
+  position: 'sticky',
+  top:0,
   '& th': {
     padding: '12px 8px',
   },
@@ -55,7 +62,7 @@ function PlayerRecord() {
   // Function to fetch player records
   const fetchPlayerRecords = async () => {
     try {
-      const response = await fetch("https://memorygame-we7d.onrender.com/player/records");
+      const response = await fetch(`${url}/player/records`);
       const data = await response.json();
       setRecords(data);
     } catch (error) {
@@ -67,18 +74,9 @@ function PlayerRecord() {
     fetchPlayerRecords();
   }, []);
 
-  
-
-  // // Function to format time in minutes and seconds
-  // const formatTime = (totalSeconds) => {
-  //   const minutes = Math.floor(totalSeconds / 60);
-  //   const seconds = totalSeconds % 60;
-  //   return `${minutes}m ${seconds}s`;
-  // };
-
-  
   const totalPlayers = records.length;
-
+  console.log(records)
+  
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
@@ -88,7 +86,7 @@ function PlayerRecord() {
   // Function to handle deletion of a player record
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://https://memorygame-we7d.onrender.com/player/${id}`, {
+      await fetch(`${url}/player/${id}`, {
         method: 'DELETE'
       });
       // After successful deletion, fetch updated records
@@ -101,7 +99,7 @@ function PlayerRecord() {
   // Function to handle deletion of all player records
   const handleDeleteAll = async () => {
     try {
-      await fetch(`https://memorygame-we7d.onrender.com/player/delete-all`, {
+      await fetch(`${url}/player/delete-all`, {
         method: 'DELETE'
       });
       // After successful deletion, fetch updated records
@@ -114,7 +112,7 @@ function PlayerRecord() {
   return (
     <Container>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "10px" }}>
-        <p style={{ color: "white", marginBottom: "5px", fontSize: "18px" }}>All-Time Players: {totalPlayers}</p>
+        <p style={{ color: "white", marginBottom: "5px",fontSize:"18px"}}>All-Time Players: {totalPlayers}</p>
       </div>
       <Button variant="danger" onClick={handleDeleteAll} style={{ marginBottom: '10px', padding: "5px" }}>Delete All</Button> {/* Button to delete all records */}
       <CustomTableContainer component={Paper}>
@@ -136,7 +134,7 @@ function PlayerRecord() {
                 <StyledTableCell align="right">{formatDate(record.startTime)}</StyledTableCell>
                 <StyledTableCell align="right">{record.elapsedTime}</StyledTableCell>
                 <StyledTableCell align="right">
-                  <Button variant="danger" onClick={() => handleDelete(record._id)}>Delete</Button>
+                  <Button variant="danger" onClick={() => handleDelete(record._id)}><MdDeleteForever/></Button>
                 </StyledTableCell>
               </StyledTableRow>
             ))}

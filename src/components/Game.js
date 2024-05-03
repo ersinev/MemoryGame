@@ -32,14 +32,16 @@ function Game() {
   const [lastMatchedPairs, setlastMatchedPairs] = useState([])
   const [ModalOpen, setModalOpen] = useState(false)
 
+  //"http://localhost:5000"
+  //"https://memorygame-we7d.onrender.com"
+  const url = "https://memorygame-we7d.onrender.com"
 
   useEffect(() => {
     // Function to establish socket connection and join room
     const initializeSocketAndJoinRoom = () => {
       console.log("server triggered")
-      //http://localhost:5000
-      //https://memorygame-we7d.onrender.com
-      const socket = io("https://memorygame-we7d.onrender.com");
+      
+      const socket = io(url);
       setSocket(socket);
       
       
@@ -277,7 +279,7 @@ function Game() {
     console.log(socket.id);
   
     try {
-      const response = await fetch('https://memorygame-we7d.onrender.com/player/start', {
+      const response = await fetch(`${url}/player/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
