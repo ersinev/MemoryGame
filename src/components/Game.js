@@ -45,6 +45,7 @@ function Game() {
       setSocket(socket);
       
       
+      
 
       // Join room if both roomId and currentPlayerName are available
       if (roomId && currentPlayerName) {
