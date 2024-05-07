@@ -76,7 +76,7 @@ function PlayerRecord() {
   }, []);
 
   const totalPlayers = records.length;
-  console.log(records)
+  
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
