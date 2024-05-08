@@ -9,10 +9,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { PiUsersThreeFill } from "react-icons/pi";
+import { FaUserClock } from "react-icons/fa6";
+import { FaClock } from "react-icons/fa6";
 
 
-  //"http://localhost:5000"
-  //"https://memorygame-we7d.onrender.com"
+//"http://localhost:5000"
+//"https://memorygame-we7d.onrender.com"
 const url = "https://memorygame-we7d.onrender.com";
 
 // Stil özelliklerini tanımla
@@ -54,7 +57,7 @@ const CustomTable = styled(Table)({
 });
 
 const CustomTableContainer = styled(TableContainer)({
-  maxHeight: 'calc(90vh)', // Adjust the height as needed
+  maxHeight: 'calc(90vh)', 
   overflowY: 'auto',
   maxWidth: 'fit-content'
 });
@@ -148,7 +151,7 @@ function PlayerRecord() {
     const hours = Math.floor(totalSeconds / 3600);
     const remainingSeconds = totalSeconds % 3600;
     const minutes = Math.floor(remainingSeconds / 60);
-    
+
     const seconds = Math.floor(remainingSeconds % 60)
 
     let formattedTime = '';
@@ -169,10 +172,21 @@ function PlayerRecord() {
     return totalSeconds / totalPlayers;
   }
 
+  const sideBarStyle = {
+    color: "white",
+    fontSize: "1.5vw",
+    border: "0.5vw solid green",
+    padding: "1vw",
+    borderRadius: "2vw",
+    whiteSpace: 'nowrap',
+    backgroundColor: "#29872d",
+    marginBottom: "2vw"
+  };
+  
   return (
     <Container>
       <Row>
-        <Col className='mt-3'>
+        <Col xs={12} md={8} className='mt-3'>
           <CustomTableContainer component={Paper}>
             <CustomTable>
               <CustomTableHead>
@@ -200,12 +214,12 @@ function PlayerRecord() {
             </CustomTable>
           </CustomTableContainer>
         </Col>
-        <Col className="d-flex justify-content-center align-items-center">
-          <div style={{ marginBottom: "20px" }}>
-            <p style={{ color: "white", fontSize: "24px", border: "5px solid green", padding: "10px", borderRadius: "10px", backgroundColor: "rgba(0, 128, 0, 0.5)" }}>All-Time Players: {totalPlayers}</p>
-            <p style={{ color: "white", fontSize: "24px", border: "5px solid green", backgroundColor: "rgba(0, 128, 0, 0.5)", padding: "10px", borderRadius: "10px", whiteSpace: 'nowrap' }}>Total Elapsed Time: {totalElapsedTime}</p>
-            <p style={{ color: "white", fontSize: "24px", border: "5px solid green", backgroundColor: "rgba(0, 128, 0, 0.5)", padding: "10px", borderRadius: "10px", whiteSpace: 'nowrap' }}>Average Elapsed Time: {averageTime}</p>
-            <Button variant="danger" onClick={handleDeleteAll} style={{ padding: "5px" }}>Delete All</Button>
+        <Col xs={12} md={4} className="d-flex justify-content-center align-items-center">
+          <div>
+            <p style={sideBarStyle}>(<PiUsersThreeFill fill='black' />) All-Time Players: {totalPlayers}</p>
+            <p style={sideBarStyle}>(<FaClock fill='black' />) Total Elapsed Time: <span>{totalElapsedTime}</span></p>
+            <p style={sideBarStyle}>(<FaUserClock fill='black' />) Average Elapsed Time: {averageTime}</p>
+            <Button variant="danger" onClick={handleDeleteAll} style={{ padding: "1vw" }}>Delete All</Button>
           </div>
         </Col>
       </Row>
