@@ -22,7 +22,7 @@ function PageNotFound() {
 
                 <img src={logo} alt="logo" style={{ width: "50%", maxWidth: "auto", height: "auto", marginBottom: "10px", borderRadius:"10px",border:"2px solid green" }} />
                 <img src={notFoundImage} alt="Page not found" style={{ width: "100%", maxWidth: "auto", height: "auto", marginBottom: "20px",borderRadius:"10px"}} />
-                <Button variant="success" href="https://itgaragememorygame.netlify.app/">Back To Home Page</Button>
+                <Button variant="success" href="https://itgaragememorygame.netlify.app/">Terug naar het spel</Button>
             </div>
         </>
     );
