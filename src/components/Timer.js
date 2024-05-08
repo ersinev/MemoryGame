@@ -47,7 +47,7 @@ function Timer({ remainingTime }) {
   };
 
   return (
-    <div style={{ backgroundColor: "white" }}>
+    <div style={{ backgroundColor: "orange", borderRadius:"5px", fontSize:"16px", padding:"1px" }}>
        {timeRemaining.minutes}m {timeRemaining.seconds}s
     </div>
   );

@@ -10,7 +10,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-//"http://localhost:5000"
+
+  //"http://localhost:5000"
   //"https://memorygame-we7d.onrender.com"
 const url = "https://memorygame-we7d.onrender.com";
 
@@ -61,6 +62,7 @@ const CustomTableContainer = styled(TableContainer)({
 function PlayerRecord() {
   const [records, setRecords] = useState([]);
   const [totalElapsedTime, setTotalElapsedTime] = useState('');
+  const [averageTime, setAverageTime] = useState('');
 
   // Fonksiyonlar
   const fetchPlayerRecords = async () => {
@@ -73,6 +75,11 @@ function PlayerRecord() {
       const totalSeconds = calculateTotalElapsedTime(data);
       const formattedTotalTime = formatTotalTime(totalSeconds);
       setTotalElapsedTime(formattedTotalTime);
+
+      // Ortalama oynama süresini hesapla
+      const average = calculateAverageTime(totalSeconds, data.length);
+      const formattedAverageTime = formatTotalTime(average);
+      setAverageTime(formattedAverageTime);
     } catch (error) {
       console.error("Error fetching player records:", error);
     }
@@ -102,13 +109,23 @@ function PlayerRecord() {
   };
 
   const handleDeleteAll = async () => {
-    try {
-      await fetch(`${url}/player/delete-all`, {
-        method: 'DELETE'
-      });
-      fetchPlayerRecords();
-    } catch (error) {
-      console.error("Error deleting all player records:", error);
+    const confirmed = window.confirm("Are you sure you want to delete all records?");
+
+    if (confirmed) {
+      const passwordPrompt = prompt("Enter the password to confirm:");
+
+      if (passwordPrompt === '159987') {
+        try {
+          await fetch(`${url}/player/delete-all`, {
+            method: 'DELETE'
+          });
+          fetchPlayerRecords();
+        } catch (error) {
+          console.error("Error deleting all player records:", error);
+        }
+      } else {
+        alert("Incorrect password. Deletion canceled.");
+      }
     }
   };
 
@@ -131,7 +148,8 @@ function PlayerRecord() {
     const hours = Math.floor(totalSeconds / 3600);
     const remainingSeconds = totalSeconds % 3600;
     const minutes = Math.floor(remainingSeconds / 60);
-    const seconds = remainingSeconds % 60;
+    
+    const seconds = Math.floor(remainingSeconds % 60)
 
     let formattedTime = '';
 
@@ -144,6 +162,11 @@ function PlayerRecord() {
     formattedTime += `${seconds}s`;
 
     return formattedTime;
+  }
+
+  function calculateAverageTime(totalSeconds, totalPlayers) {
+    if (totalPlayers === 0) return 0;
+    return totalSeconds / totalPlayers;
   }
 
   return (
@@ -180,8 +203,9 @@ function PlayerRecord() {
         <Col className="d-flex justify-content-center align-items-center">
           <div style={{ marginBottom: "20px" }}>
             <p style={{ color: "white", fontSize: "24px", border: "5px solid green", padding: "10px", borderRadius: "10px", backgroundColor: "rgba(0, 128, 0, 0.5)" }}>All-Time Players: {totalPlayers}</p>
-            <p style={{ color: "white", fontSize: "24px", border: "5px solid green", backgroundColor: "rgba(0, 128, 0, 0.5)", padding: "10px", borderRadius: "10px", whiteSpace: 'nowrap'  }}>Total Elapsed Time: {totalElapsedTime}</p>
-            <Button variant="danger" onClick={handleDeleteAll} style={{ marginBottom: '10px', padding: "5px" }}>Delete All</Button>
+            <p style={{ color: "white", fontSize: "24px", border: "5px solid green", backgroundColor: "rgba(0, 128, 0, 0.5)", padding: "10px", borderRadius: "10px", whiteSpace: 'nowrap' }}>Total Elapsed Time: {totalElapsedTime}</p>
+            <p style={{ color: "white", fontSize: "24px", border: "5px solid green", backgroundColor: "rgba(0, 128, 0, 0.5)", padding: "10px", borderRadius: "10px", whiteSpace: 'nowrap' }}>Average Elapsed Time: {averageTime}</p>
+            <Button variant="danger" onClick={handleDeleteAll} style={{ padding: "5px" }}>Delete All</Button>
           </div>
         </Col>
       </Row>
