@@ -10,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-  //"http://localhost:5000"
+//"http://localhost:5000"
   //"https://memorygame-we7d.onrender.com"
 const url = "https://memorygame-we7d.onrender.com";
 
@@ -146,30 +146,6 @@ function PlayerRecord() {
     return formattedTime;
   }
 
-  function calculateAverageTime(totalSeconds, totalPlayers) {
-    if (totalPlayers === 0) return '0s'; // Bölmeyi kontrol et
-    const averageSeconds = totalSeconds / totalPlayers;
-
-    const hours = Math.floor(averageSeconds / 3600);
-    const remainingSeconds = averageSeconds % 3600;
-    const minutes = Math.floor(remainingSeconds / 60);
-    const seconds = Math.floor(remainingSeconds % 60);
-
-    let formattedTime = '';
-
-    if (hours > 0) {
-      formattedTime += `${hours}h `;
-    }
-    if (minutes > 0 || hours > 0) {
-      formattedTime += `${minutes}m `;
-    }
-    formattedTime += `${seconds}s`;
-
-    return formattedTime;
-  }
-
-  const averageTime = calculateAverageTime(totalElapsedTime, totalPlayers);
-
   return (
     <Container>
       <Row>
@@ -204,8 +180,7 @@ function PlayerRecord() {
         <Col className="d-flex justify-content-center align-items-center">
           <div style={{ marginBottom: "20px" }}>
             <p style={{ color: "white", fontSize: "24px", border: "5px solid green", padding: "10px", borderRadius: "10px", backgroundColor: "rgba(0, 128, 0, 0.5)" }}>All-Time Players: {totalPlayers}</p>
-            <p style={{ color: "white", fontSize: "24px", border: "5px solid green", backgroundColor: "rgba(0, 128, 0, 0.5)", padding: "10px", borderRadius: "10px", whiteSpace: 'nowrap' }}>Total Elapsed Time: {totalElapsedTime}</p>
-            <p style={{ color: "white", fontSize: "24px", border: "5px solid green", backgroundColor: "rgba(0, 128, 0, 0.5)", padding: "10px", borderRadius: "10px", whiteSpace: 'nowrap' }}>Average Elapsed Time: {averageTime}</p>
+            <p style={{ color: "white", fontSize: "24px", border: "5px solid green", backgroundColor: "rgba(0, 128, 0, 0.5)", padding: "10px", borderRadius: "10px", whiteSpace: 'nowrap'  }}>Total Elapsed Time: {totalElapsedTime}</p>
             <Button variant="danger" onClick={handleDeleteAll} style={{ marginBottom: '10px', padding: "5px" }}>Delete All</Button>
           </div>
         </Col>
