@@ -57,7 +57,7 @@ const CustomTable = styled(Table)({
 });
 
 const CustomTableContainer = styled(TableContainer)({
-  maxHeight: 'calc(90vh)', 
+  maxHeight: 'calc(90vh)',
   overflowY: 'auto',
   maxWidth: 'fit-content'
 });
@@ -101,13 +101,22 @@ function PlayerRecord() {
   };
 
   const handleDelete = async (id) => {
-    try {
-      await fetch(`${url}/player/${id}`, {
-        method: 'DELETE'
-      });
-      fetchPlayerRecords();
-    } catch (error) {
-      console.error("Error deleting player record:", error);
+    const confirmed = window.confirm("Are you sure you want to delete the record?");
+
+    if (confirmed) {
+      const passwordPrompt = prompt("Enter the password to confirm:");
+      if (passwordPrompt === '159987') {
+        try {
+          await fetch(`${url}/player/${id}`, {
+            method: 'DELETE'
+          });
+          fetchPlayerRecords();
+        } catch (error) {
+          console.error("Error deleting player record:", error);
+        }
+      }else {
+        alert("Incorrect password. Deletion canceled.");
+      }
     }
   };
 
@@ -182,7 +191,7 @@ function PlayerRecord() {
     backgroundColor: "#29872d",
     marginBottom: "2vw"
   };
-  
+
   return (
     <Container>
       <Row>
