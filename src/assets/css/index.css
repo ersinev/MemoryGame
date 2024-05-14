@@ -9,7 +9,10 @@
 }
 
 #root {
-  height: 100vh;
+ 
+  
+  
+  min-height: 100vh;
   display: flex;
   
   background: #130f40; 

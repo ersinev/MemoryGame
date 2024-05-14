@@ -114,7 +114,7 @@ function PlayerRecord() {
         } catch (error) {
           console.error("Error deleting player record:", error);
         }
-      }else {
+      } else {
         alert("Incorrect password. Deletion canceled.");
       }
     }
@@ -183,19 +183,19 @@ function PlayerRecord() {
 
   const sideBarStyle = {
     color: "white",
-    fontSize: "1.5vw",
     border: "0.5vw solid green",
-    padding: "1vw",
+    padding: "10px",
     borderRadius: "1vw",
     whiteSpace: 'nowrap',
     backgroundColor: "#29872d",
-    marginBottom: "2vw"
+    marginBottom: "2vw",
+    
   };
 
   const sideBarElementStyle = {
-    backgroundColor:"orange",
-    borderRadius: "1vw",
-    padding: "8px"
+    backgroundColor: "orange",
+    borderRadius: "8%",
+    padding: "5px",
   }
 
   return (
@@ -229,12 +229,12 @@ function PlayerRecord() {
             </CustomTable>
           </CustomTableContainer>
         </Col>
-        <Col xs={12} md={4} className="d-flex justify-content-center align-items-center">
+        <Col xs={12} md={4} className="d-flex flex-column justify-content-center align-items-center mt-3">
           <div>
-            <p style={sideBarStyle}>(<PiUsersThreeFill fill='black' />) All-Time Players: <span style={sideBarElementStyle}>{totalPlayers}</span></p>
-            <p style={sideBarStyle}>(<FaClock fill='black' />) Total Elapsed Time: <span style={sideBarElementStyle}>{totalElapsedTime}</span></p>
-            <p style={sideBarStyle}>(<FaUserClock fill='black' />) Average Elapsed Time: <span style={sideBarElementStyle}>{averageTime}</span></p>
-            <Button variant="danger" onClick={handleDeleteAll} style={{ padding: "1vw" }}>Delete All</Button>
+            <h4 style={sideBarStyle}>(<PiUsersThreeFill fill='black' />) All-Time Players: <span style={sideBarElementStyle}>{totalPlayers}</span></h4>
+            <h4 style={sideBarStyle}>(<FaClock fill='black' />) Total Elapsed Time: <span style={sideBarElementStyle}>{totalElapsedTime}</span></h4>
+            <h4 style={sideBarStyle}>(<FaUserClock fill='black' />) Average Elapsed Time: <span style={sideBarElementStyle}>{averageTime}</span></h4>
+            <Button variant="danger" onClick={handleDeleteAll} style={{ padding: "0.5vw", marginBottom:"10px" }}>Delete All</Button>
           </div>
         </Col>
       </Row>
